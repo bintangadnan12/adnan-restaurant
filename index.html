@@ -4,301 +4,326 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Adnan's Restaurant — Fine Dining Experience</title>
-<meta name="description" content="Adnan's Restaurant menghadirkan pengalaman kuliner premium di Jakarta. Chef bersertifikat, bahan terpilih, suasana eksklusif. Reservasi meja sekarang."/>
+<meta name="description" content="Adnan's Restaurant menghadirkan pengalaman kuliner premium di Jakarta. Chef bersertifikat, bahan terpilih, suasana eksklusif."/>
 <meta property="og:title" content="Adnan's Restaurant — Fine Dining Experience"/>
-<meta property="og:type" content="website"/>
 <meta name="theme-color" content="#080502"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400;1,600;1,700&family=DM+Sans:wght@200;300;400&family=Bebas+Neue&display=swap" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:auto}
-body{background:#080502;color:#F5F0E8;font-family:'DM Sans',sans-serif;overflow-x:hidden}
-:root{
-  --gold:#C8922A;--gold-lt:#F0D080;--gold-dk:#7A4F10;
-  --cream:#F5F0E8;--noir:#080502;--noir2:#120C04;
-}
+html,body{overflow-x:hidden;scroll-behavior:auto}
+body{background:#080502;color:#F5F0E8;font-family:'DM Sans',sans-serif}
+:root{--gold:#C8922A;--gold-lt:#F0D080;--gold-dk:#7A4F10;--cream:#F5F0E8;--noir:#080502}
 
-/* ── CURSOR (desktop only) ─────────────────────────── */
-@media(hover:hover) and (pointer:fine){
-  body{cursor:none}
-  #cur{display:block}
-  #cur2{display:block}
-}
-#cur{display:none;position:fixed;width:4px;height:4px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s}
-#cur2{display:none;position:fixed;width:28px;height:28px;border:1px solid rgba(200,146,42,.2);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .28s,height .28s,border-color .28s}
+/* ── CURSOR ─────────────────────────────────────────── */
+@media(hover:hover) and (pointer:fine){body{cursor:none}#cur,#cur2{display:block}}
+#cur{display:none;position:fixed;width:5px;height:5px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .08s}
+#cur2{display:none;position:fixed;width:32px;height:32px;border:1px solid rgba(200,146,42,.25);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s,opacity .3s}
+body:hover #cur2{opacity:1}
 
-/* ── LOADER ────────────────────────────────────────── */
-#loader{position:fixed;inset:0;background:#080502;z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;transition:opacity 1.8s,visibility 1.8s}
-#loader.out{opacity:0;visibility:hidden}
-.ld-logo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;letter-spacing:12px;color:var(--gold);opacity:0;transform:translateY(10px);transition:opacity 1.2s,transform 1.2s}
+/* ── LOADER ─────────────────────────────────────────── */
+#loader{position:fixed;inset:0;background:#080502;z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transition:opacity 1.6s ease,visibility 1.6s ease}
+#loader.out{opacity:0;visibility:hidden;pointer-events:none}
+.ld-logo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;letter-spacing:10px;color:var(--gold);opacity:0;transform:translateY(12px);transition:opacity 1s,transform 1s}
 #loader.rdy .ld-logo{opacity:1;transform:none}
-.ld-tag{font-family:'Bebas Neue',sans-serif;font-size:7px;letter-spacing:8px;color:rgba(200,146,42,.3);margin-top:-20px}
-.ld-bar{width:180px;height:1px;background:rgba(200,146,42,.08);margin:8px 0}
-.ld-fill{height:100%;background:linear-gradient(90deg,var(--gold-dk),var(--gold),var(--gold-lt));width:0%;transition:width .06s linear}
-.ld-pct{font-family:'Bebas Neue',sans-serif;font-size:7px;letter-spacing:6px;color:rgba(200,146,42,.3)}
+.ld-sub{font-family:'Bebas Neue',sans-serif;font-size:7px;letter-spacing:8px;color:rgba(200,146,42,.28);margin-top:-16px}
+.ld-bar{width:160px;height:1px;background:rgba(200,146,42,.07);overflow:hidden}
+.ld-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--gold-dk),var(--gold),var(--gold-lt));transition:width .05s linear}
+.ld-pct{font-family:'Bebas Neue',sans-serif;font-size:7px;letter-spacing:5px;color:rgba(200,146,42,.28)}
 
-/* ── LAYER STACK ────────────────────────────────────
-   1  #bgcanvas  — frame scrubbing (video)
-   2  #cv        — Three.js particles (desktop)
-   3  #vig       — vignette
-   4  #grade     — scene colour grade
-   5  #scanwash  — transition gold wash
-   50+ sections
-   500 nav/ui
-───────────────────────────────────────────────────── */
-#bgcanvas{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+/* ── LAYER STACK ─────────────────────────────────────
+   z1  bgcanvas – frame scrubbing
+   z2  cv       – Three.js particles (desktop)
+   z3  vig      – vignette
+   z4  grade    – colour grade
+   z5  scanwash – transition flash
+   z6  lgrad    – top/bottom edge fades
+   z50 sb/stage – scroll + sections
+   z500 nav/ui
+──────────────────────────────────────────────────── */
+#bgcanvas{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;display:block}
 #cv{position:fixed;inset:0;z-index:2;mix-blend-mode:screen;pointer-events:none}
 @media(max-width:768px){#cv{display:none}}
-#vig{position:fixed;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse 70% 72% at 50% 50%,transparent 28%,rgba(0,0,0,.85) 100%)}
-#grade{position:fixed;inset:0;z-index:4;pointer-events:none;opacity:0;transition:background 2s ease,opacity 1.4s ease;mix-blend-mode:overlay}
-#scanwash{position:fixed;inset:0;z-index:5;pointer-events:none;background:radial-gradient(ellipse 110% 90% at 50% 45%,rgba(200,146,42,.55),transparent 72%);opacity:0}
-#ltop{position:fixed;top:0;left:0;right:0;height:6vh;background:linear-gradient(to bottom,#080502,transparent);z-index:6;pointer-events:none}
-#lbot{position:fixed;bottom:0;left:0;right:0;height:6vh;background:linear-gradient(to top,#080502,transparent);z-index:6;pointer-events:none}
+#vig{position:fixed;inset:0;z-index:3;pointer-events:none;
+  background:radial-gradient(ellipse 78% 80% at 50% 50%,transparent 22%,rgba(0,0,0,.92) 100%)}
+#grade{position:fixed;inset:0;z-index:4;pointer-events:none;mix-blend-mode:overlay;
+  background:rgba(200,146,42,.2);opacity:0;transition:background 1.8s,opacity 1.2s}
+#scanwash{position:fixed;inset:0;z-index:5;pointer-events:none;
+  background:radial-gradient(ellipse 120% 100% at 50% 50%,rgba(200,146,42,.65),transparent 68%);opacity:0}
+#ltop{position:fixed;top:0;left:0;right:0;height:9vh;background:linear-gradient(to bottom,rgba(8,5,2,.95),transparent);z-index:6;pointer-events:none}
+#lbot{position:fixed;bottom:0;left:0;right:0;height:7vh;background:linear-gradient(to top,rgba(8,5,2,.85),transparent);z-index:6;pointer-events:none}
 
-/* ── NAV ───────────────────────────────────────────── */
-nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:22px 56px;display:flex;align-items:center;justify-content:space-between}
-.nav-logo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;letter-spacing:5px;color:rgba(245,240,232,.8);text-decoration:none}
+/* ── NAV ─────────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:20px 52px;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+nav>*{pointer-events:auto}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;letter-spacing:5px;color:rgba(245,240,232,.75);text-decoration:none;transition:color .3s}
+.nav-logo:hover{color:var(--cream)}
 .nav-logo span{color:var(--gold)}
-.nav-links{display:flex;gap:36px;list-style:none}
-.nav-links a{font-family:'Bebas Neue',sans-serif;font-size:8px;letter-spacing:5px;text-transform:uppercase;color:rgba(245,240,232,.2);text-decoration:none;transition:color .3s}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{font-family:'Bebas Neue',sans-serif;font-size:7.5px;letter-spacing:5px;text-transform:uppercase;color:rgba(245,240,232,.18);text-decoration:none;transition:color .3s}
 .nav-links a:hover{color:var(--gold)}
 
-/* ── PROGRESS BAR ───────────────────────────────────── */
-#pbar{position:fixed;left:22px;top:50%;transform:translateY(-50%);width:1px;height:90px;background:rgba(255,255,255,.04);z-index:500}
-#pbar-f{width:100%;background:linear-gradient(to bottom,var(--gold-dk),var(--gold-lt));height:0%}
+/* ── PROGRESS + DOTS ─────────────────────────────── */
+#pbar{position:fixed;left:20px;top:50%;transform:translateY(-50%);width:1px;height:80px;background:rgba(255,255,255,.04);z-index:500;pointer-events:none}
+#pbar-f{width:100%;background:linear-gradient(to bottom,var(--gold-dk),var(--gold-lt));height:0%;transition:height .05s}
+#dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:9px;z-index:500}
+.dot{width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.1);cursor:pointer;transition:background .4s,transform .35s,height .3s,border-radius .3s}
+.dot.on{background:var(--gold);transform:scale(1.8);height:10px;border-radius:2px}
 
-/* ── DOTS ───────────────────────────────────────────── */
-#dots{position:fixed;right:22px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:500}
-.dot{width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.12);cursor:pointer;transition:background .4s,transform .4s,height .3s}
-.dot.on{background:var(--gold);transform:scale(2);height:8px;border-radius:2px}
+/* ── SCENE LABEL ─────────────────────────────────── */
+#scene-lbl{position:fixed;bottom:7vh;left:50%;transform:translateX(-50%);
+  font-family:'Bebas Neue',sans-serif;font-size:6px;letter-spacing:9px;
+  color:rgba(200,146,42,.18);z-index:500;text-transform:uppercase;white-space:nowrap;pointer-events:none;
+  transition:opacity .6s}
 
-/* ── SCENE LABEL ────────────────────────────────────── */
-#scene-lbl{position:fixed;bottom:8vh;left:50%;transform:translateX(-50%);font-family:'Bebas Neue',sans-serif;font-size:6.5px;letter-spacing:9px;color:rgba(200,146,42,.2);z-index:500;text-transform:uppercase;white-space:nowrap;pointer-events:none}
+/* ── SCROLL HINT ─────────────────────────────────── */
+#shint{position:fixed;bottom:7vh;right:44px;display:flex;flex-direction:column;align-items:center;gap:7px;z-index:500;opacity:0;pointer-events:none;transition:opacity 1s 2.2s}
+#shint.vis{opacity:.22}
+#shint span{font-family:'Bebas Neue',sans-serif;font-size:5.5px;letter-spacing:5px;color:#fff;text-transform:uppercase}
+.sh-l{width:1px;height:30px;background:linear-gradient(to bottom,var(--gold),transparent);animation:shpulse 2.6s ease-in-out infinite}
+@keyframes shpulse{0%,100%{transform:scaleY(.06);opacity:0}60%{transform:scaleY(1);opacity:1}}
 
-/* ── SCROLL HINT ────────────────────────────────────── */
-#shint{position:fixed;bottom:8vh;right:50px;display:flex;flex-direction:column;align-items:center;gap:6px;z-index:500;opacity:0;transition:opacity 1.2s 1.8s;pointer-events:none}
-#shint.vis{opacity:.2}
-#shint span{font-family:'Bebas Neue',sans-serif;font-size:6px;letter-spacing:5px;text-transform:uppercase;color:#fff}
-.sh-l{width:1px;height:28px;background:linear-gradient(to bottom,var(--gold),transparent);animation:shp 2.4s ease-in-out infinite}
-@keyframes shp{0%,100%{transform:scaleY(.1);opacity:.1}55%{transform:scaleY(1);opacity:1}}
+/* ── SCROLL CONTAINER ────────────────────────────── */
+#sb{height:1500vh;position:relative}
+#stage{position:sticky;top:0;height:100vh;overflow:hidden}
 
-/* ── SCROLL CONTAINER ───────────────────────────────── */
-#sb{height:1500vh;position:relative;z-index:50}
-#stage{position:sticky;top:0;height:100vh;overflow:visible;z-index:51}
-
-/* ── SECTIONS BASE ──────────────────────────────────── */
-.sec{position:absolute;inset:0;pointer-events:none;opacity:0;perspective:900px;perspective-origin:50% 40%}
+/* ── SECTIONS BASE ───────────────────────────────── */
+.sec{
+  position:absolute;inset:0;
+  pointer-events:none;opacity:0;
+  perspective:1000px;perspective-origin:50% 42%;
+  will-change:opacity;
+}
 .sec.vis{pointer-events:auto}
-.sec *{text-shadow:0 2px 28px rgba(0,0,0,.98),0 0 60px rgba(0,0,0,.85)}
 
-/* Word-split stagger base */
+/* shadows on all section text */
+.sec *:not(input):not(select):not(textarea):not(button):not(a):not(.btn-wa-rv){
+  text-shadow:0 2px 30px rgba(0,0,0,1),0 0 80px rgba(0,0,0,.9)
+}
+
+/* ── WORD SPANS (3D entry per word) ──────────────── */
 .wd{
   display:inline-block;opacity:0;
   transition:
-    opacity .8s cubic-bezier(.25,.46,.45,.94) calc(var(--i)*60ms),
-    transform .9s cubic-bezier(.19,1,.22,1)   calc(var(--i)*60ms),
-    filter   .6s ease                          calc(var(--i)*60ms);
+    opacity  .85s cubic-bezier(.25,.46,.45,.94) calc(var(--i,0)*65ms),
+    transform .95s cubic-bezier(.19,1,.22,1)    calc(var(--i,0)*65ms),
+    filter   .65s ease                           calc(var(--i,0)*65ms);
 }
-.sec.anim-in .wd{opacity:1;transform:none !important;filter:none !important}
-.sec.anim-out .wd{opacity:0;transition:opacity .2s ease calc(var(--i)*18ms),transform .22s ease calc(var(--i)*18ms)}
+.sec.anim-in  .wd{opacity:1 !important;transform:none !important;filter:none !important}
+.sec.anim-out .wd{
+  opacity:0 !important;
+  transition:
+    opacity   .22s ease calc(var(--i,0)*20ms),
+    transform .24s ease calc(var(--i,0)*20ms)
+}
 
-/* ── 3D FONT ENTRY PER SCENE (matching camera movement) ── */
-/* S0: drone zooms in from high, tilts down → text comes from sky */
-#s0 .wd{transform:translateZ(-380px) rotateX(22deg);filter:blur(6px)}
-/* S1: forward dolly → cards/text fly from depth */
-#s1 .wd{transform:translateZ(-520px);filter:blur(4px)}
-/* S2: lateral pan L→R → content slides from left */
-#s2 .wd{transform:translateX(-65px);filter:blur(3px)}
-/* S3: fast dolly + upward tilt → elements snap from below */
-#s3 .wd{transform:translateY(65px) rotateX(-18deg) scaleY(.88);filter:blur(4px);
-  transition:opacity .28s ease calc(var(--i)*35ms), transform .32s cubic-bezier(.25,.46,.45,.94) calc(var(--i)*35ms), filter .2s ease calc(var(--i)*35ms)}
-#s3.anim-in .wd{opacity:1;transform:none !important;filter:none !important}
-/* S4: overhead 360° → content rotates in from above */
-#s4 .wd{transform:rotateX(32deg) translateZ(-140px);filter:blur(5px)}
+/* ── PER-SCENE 3D INITIAL TRANSFORM ─────────────────
+   Each matches the video camera movement direction   */
+/* S0: drone high-angle zoom-in → text falls from above+depth */
+#s0 .wd{transform:translateZ(-420px) translateY(-30px) rotateX(20deg);filter:blur(7px)}
 
-/* Labels */
-.lbl{font-family:'Bebas Neue',sans-serif;font-size:7px;letter-spacing:8px;text-transform:uppercase;color:var(--gold);opacity:0;transform:translateY(6px);transition:opacity .7s .08s, transform .7s .08s;display:flex;align-items:center;gap:12px;margin-bottom:18px}
-.lbl::before{content:'';width:20px;height:1px;background:var(--gold);flex-shrink:0}
-.sec.anim-in .lbl{opacity:1;transform:none}
+/* S1: forward dolly into food → fly from far depth */
+#s1 .wd{transform:translateZ(-550px);filter:blur(5px)}
+
+/* S2: lateral pan right → slide in from left */
+#s2 .wd{transform:translateX(-70px) translateZ(-80px);filter:blur(3px)}
+
+/* S3: fast tilt up (kitchen reveal) → text snaps from below */
+#s3 .wd{
+  transform:translateY(70px) rotateX(-20deg) scaleY(.85);filter:blur(5px);
+  transition:
+    opacity   .3s ease  calc(var(--i,0)*38ms),
+    transform .34s cubic-bezier(.25,.46,.45,.94) calc(var(--i,0)*38ms),
+    filter    .22s ease calc(var(--i,0)*38ms)
+}
+
+/* S4: overhead wide shot → content rotates down from top */
+#s4 .wd{transform:rotateX(35deg) translateZ(-160px) translateY(-20px);filter:blur(6px)}
+
+/* ── LABELS ──────────────────────────────────────── */
+.lbl{
+  font-family:'Bebas Neue',sans-serif;font-size:7px;letter-spacing:8px;
+  text-transform:uppercase;color:var(--gold);
+  display:flex;align-items:center;gap:12px;margin-bottom:18px;
+  opacity:0;transform:translateY(8px);
+  transition:opacity .75s .06s,transform .75s .06s
+}
+.lbl::before{content:'';width:22px;height:1px;background:var(--gold);flex-shrink:0}
+.sec.anim-in  .lbl{opacity:1;transform:none}
 .sec.anim-out .lbl{opacity:0;transition:opacity .18s}
 
-/* ── S0 HERO ─────────────────────────────────────────── */
-#s0{display:flex;flex-direction:column;justify-content:flex-end;padding:0 56px 12vh;max-width:65%}
-.h-eyebrow{font-family:'Bebas Neue',sans-serif;font-size:7px;letter-spacing:8px;color:rgba(200,146,42,.55);margin-bottom:14px}
-.h-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(38px,5.8vw,78px);font-weight:600;line-height:.85;letter-spacing:-1px;margin-bottom:14px;color:var(--cream)}
-.h-title span{color:var(--gold);font-weight:700}
-.h-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.5vw,20px);color:rgba(245,240,232,.42);font-weight:300;line-height:1.55;margin-bottom:18px}
-.h-tag{font-family:'Bebas Neue',sans-serif;font-size:6.5px;letter-spacing:6px;color:rgba(200,146,42,.3);text-transform:uppercase}
+/* ── S0 HERO ─────────────────────────────────────── */
+#s0{display:flex;flex-direction:column;justify-content:flex-end;padding:0 56px 13vh;max-width:70%}
+.h-eyebrow{font-family:'Bebas Neue',sans-serif;font-size:7px;letter-spacing:9px;color:rgba(200,146,42,.5);margin-bottom:16px}
+.h-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(40px,6vw,82px);font-weight:700;line-height:.82;letter-spacing:-1.5px;margin-bottom:16px;color:var(--cream)}
+.h-title .gold{color:var(--gold)}
+.h-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.6vw,21px);color:rgba(245,240,232,.38);font-weight:300;line-height:1.6;margin-bottom:20px}
+.h-tag{font-family:'Bebas Neue',sans-serif;font-size:6.5px;letter-spacing:7px;color:rgba(200,146,42,.28);text-transform:uppercase}
 
-/* ── S1 MENU ─────────────────────────────────────────── */
+/* ── S1 MENU ─────────────────────────────────────── */
 #s1{display:flex;flex-direction:column;justify-content:center;padding:0 56px}
-.m-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(26px,3.8vw,52px);line-height:.88;letter-spacing:-0.5px;margin-bottom:28px;color:var(--cream)}
-.menu-row{display:flex;gap:12px;align-items:stretch}
+.m-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(26px,3.8vw,52px);line-height:.88;letter-spacing:-.5px;margin-bottom:24px;color:var(--cream)}
+.menu-row{display:flex;gap:10px;align-items:stretch}
 .menu-card{
-  flex:1;border:1px solid rgba(200,146,42,.12);padding:20px 18px;
-  background:rgba(8,5,2,.55);backdrop-filter:blur(6px);
-  transform:perspective(1100px) translateZ(-480px);opacity:0;
-  transition:opacity .9s ease calc(var(--mc,0)*120ms),
-             transform .95s cubic-bezier(.19,1,.22,1) calc(var(--mc,0)*120ms),
-             border-color .3s, background .3s;
+  flex:1;border:1px solid rgba(200,146,42,.1);padding:18px 16px;
+  background:rgba(6,4,1,.6);backdrop-filter:blur(8px) saturate(140%);
+  transform:perspective(1200px) translateZ(-520px);opacity:0;
+  transition:
+    opacity   .95s ease calc(var(--mc,0)*130ms),
+    transform 1s   cubic-bezier(.19,1,.22,1) calc(var(--mc,0)*130ms),
+    border-color .3s,background .3s,box-shadow .3s;
   position:relative;overflow:hidden;cursor:pointer;
 }
-.menu-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(200,146,42,.06),transparent);opacity:0;transition:opacity .3s}
-.menu-card:hover::after{opacity:1}
-.menu-card:hover{border-color:rgba(200,146,42,.38);background:rgba(20,14,4,.7)}
-.sec.anim-in .menu-card{opacity:1;transform:perspective(1100px) translateZ(0)}
-.sec.anim-out .menu-card{opacity:0;transform:perspective(1100px) translateZ(-200px);transition-duration:.25s,.25s}
-.mc-cat{font-family:'Bebas Neue',sans-serif;font-size:6.5px;letter-spacing:5px;color:var(--gold-dk);margin-bottom:8px;text-transform:uppercase}
-.mc-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,1.6vw,20px);font-weight:600;color:var(--cream);line-height:1.2;margin-bottom:6px}
-.mc-desc{font-size:9px;font-weight:300;color:rgba(245,240,232,.32);line-height:1.7;margin-bottom:14px}
-.mc-price{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:1px}
-.mc-price small{font-family:'DM Sans',sans-serif;font-size:7px;color:rgba(200,146,42,.4);letter-spacing:1px;display:block;margin-top:1px}
+.menu-card::before{content:'';position:absolute;inset:0;background:linear-gradient(150deg,rgba(200,146,42,.05) 0%,transparent 60%);opacity:0;transition:opacity .35s}
+.menu-card:hover{border-color:rgba(200,146,42,.35);background:rgba(15,10,2,.72);box-shadow:0 0 32px rgba(200,146,42,.08)}
+.menu-card:hover::before{opacity:1}
+.sec.anim-in .menu-card{opacity:1;transform:perspective(1200px) translateZ(0)}
+.sec.anim-out .menu-card{opacity:0;transform:perspective(1200px) translateZ(-280px);
+  transition:opacity .2s ease calc(var(--mc,0)*40ms),transform .22s ease calc(var(--mc,0)*40ms)}
+.mc-cat{font-family:'Bebas Neue',sans-serif;font-size:6.5px;letter-spacing:5px;color:var(--gold-dk);margin-bottom:9px;text-transform:uppercase}
+.mc-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,1.5vw,20px);font-weight:600;color:var(--cream);line-height:1.18;margin-bottom:7px;transition:color .25s}
+.mc-desc{font-size:9px;font-weight:300;color:rgba(245,240,232,.28);line-height:1.75;margin-bottom:14px}
+.mc-price{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--gold);letter-spacing:1px;transition:color .25s}
+.mc-price small{font-family:'DM Sans',sans-serif;font-size:7px;color:rgba(200,146,42,.38);letter-spacing:1px;display:block;margin-top:2px}
 
-/* ── S2 ABOUT ────────────────────────────────────────── */
-#s2{display:flex;flex-direction:column;justify-content:center;align-items:flex-end;padding:0 56px;text-align:right}
-.ab-inner{max-width:480px;text-align:right}
-#s2 .lbl{flex-direction:row-reverse}
+/* ── S2 TENTANG ──────────────────────────────────── */
+#s2{display:flex;flex-direction:column;justify-content:center;align-items:flex-end;padding:0 56px}
+.ab-inner{max-width:500px;text-align:right}
+#s2 .lbl{flex-direction:row-reverse;justify-content:flex-start}
 #s2 .lbl::before{display:none}
-#s2 .lbl::after{content:'';width:20px;height:1px;background:var(--gold)}
-.ab-quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,2.4vw,32px);font-weight:600;color:var(--cream);line-height:1.25;margin-bottom:14px}
-.ab-quote em{color:var(--gold);font-style:italic}
-.ab-body{font-size:10px;font-weight:300;color:rgba(245,240,232,.35);line-height:1.9;margin-bottom:22px}
-.ab-values{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:left}
+#s2 .lbl::after{content:'';width:22px;height:1px;background:var(--gold);flex-shrink:0}
+.ab-quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,2.5vw,33px);font-weight:600;color:var(--cream);line-height:1.22;margin-bottom:15px}
+.ab-quote em{color:var(--gold)}
+.ab-body{font-size:10px;font-weight:300;color:rgba(245,240,232,.32);line-height:1.95;margin-bottom:24px}
+.ab-values{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:left}
 .av-item{
-  border:1px solid rgba(200,146,42,.1);padding:12px;
-  background:rgba(8,5,2,.4);backdrop-filter:blur(4px);
-  opacity:0;transform:translateX(30px);
-  transition:opacity .55s ease calc(var(--vi,0)*100ms), transform .6s cubic-bezier(.25,.46,.45,.94) calc(var(--vi,0)*100ms), border-color .3s, background .3s;
+  border:1px solid rgba(200,146,42,.09);padding:13px;
+  background:rgba(8,5,2,.45);backdrop-filter:blur(5px);
+  opacity:0;transform:translateX(35px);
+  transition:opacity .6s ease calc(var(--vi,0)*110ms),transform .65s cubic-bezier(.25,.46,.45,.94) calc(var(--vi,0)*110ms),border-color .3s,background .3s,transform .3s;
 }
-.sec.anim-in .av-item{opacity:1;transform:none}
-.sec.anim-out .av-item{opacity:0;transform:translateX(20px);transition-duration:.18s,.18s}
-.av-icon{font-size:14px;margin-bottom:5px;display:block}
+.sec.anim-in  .av-item{opacity:1;transform:none}
+.sec.anim-out .av-item{opacity:0;transform:translateX(22px);transition-duration:.16s,.16s}
+.av-item:hover{border-color:rgba(200,146,42,.3);background:rgba(18,11,2,.6);transform:translateY(-3px) !important}
+.av-icon{font-size:15px;margin-bottom:6px;display:block}
 .av-name{font-family:'Bebas Neue',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);margin-bottom:4px}
-.av-desc{font-size:8px;font-weight:300;color:rgba(245,240,232,.3);line-height:1.7}
+.av-desc{font-size:8px;font-weight:300;color:rgba(245,240,232,.27);line-height:1.75}
 
-/* ── S3 KITCHEN ──────────────────────────────────────── */
+/* ── S3 DAPUR ────────────────────────────────────── */
 #s3{display:flex;flex-direction:column;justify-content:center;padding:0 56px}
-.kc-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(24px,3.6vw,50px);line-height:.9;letter-spacing:-0.5px;margin-bottom:28px;color:var(--cream)}
-.feat-list{display:flex;flex-direction:column;gap:0;max-width:600px}
+.kc-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(24px,3.6vw,50px);line-height:.9;letter-spacing:-.5px;margin-bottom:26px;color:var(--cream)}
+.feat-list{display:flex;flex-direction:column;max-width:620px}
 .feat-item{
-  display:grid;grid-template-columns:22px 1fr;column-gap:14px;
-  padding:13px 0;border-top:1px solid rgba(255,255,255,.05);
-  opacity:0;transform:translateY(55px) rotateX(-16deg) scaleY(.88);
-  transition:opacity .26s ease calc(var(--fi,0)*55ms),
-             transform .3s cubic-bezier(.25,.46,.45,.94) calc(var(--fi,0)*55ms),
-             border-color .3s;
+  display:grid;grid-template-columns:24px 1fr;column-gap:15px;
+  padding:14px 0;border-top:1px solid rgba(255,255,255,.04);
+  opacity:0;transform:translateY(60px) rotateX(-18deg) scaleY(.86);
+  transition:
+    opacity   .28s ease calc(var(--fi,0)*60ms),
+    transform .32s cubic-bezier(.25,.46,.45,.94) calc(var(--fi,0)*60ms),
+    border-color .3s;
+  cursor:default;
 }
-.feat-item:last-child{border-bottom:1px solid rgba(255,255,255,.05)}
-.sec.anim-in .feat-item{opacity:1;transform:none}
-.sec.anim-out .feat-item{opacity:0;transform:translateY(30px);transition-duration:.15s,.15s}
-.feat-item:hover{border-color:rgba(200,146,42,.2)}
-.fi-num{font-family:'Bebas Neue',sans-serif;font-size:8px;color:var(--gold-dk);letter-spacing:1px;align-self:center}
-.fi-wrap{}
-.fi-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.8vw,20px);letter-spacing:2px;color:var(--cream);margin-bottom:2px;transition:color .25s}
-.feat-item:hover .fi-name{color:var(--gold-lt)}
-.fi-desc{font-size:9px;font-weight:300;color:rgba(245,240,232,.3);line-height:1.6}
+.feat-item:last-child{border-bottom:1px solid rgba(255,255,255,.04)}
+.sec.anim-in  .feat-item{opacity:1;transform:none}
+.sec.anim-out .feat-item{opacity:0;transform:translateY(35px);transition-duration:.14s,.14s}
+.feat-item:hover{border-color:rgba(200,146,42,.18)}
+.fi-num{font-family:'Bebas Neue',sans-serif;font-size:7.5px;color:var(--gold-dk);letter-spacing:1px;align-self:center;transition:color .25s}
+.feat-item:hover .fi-num{color:var(--gold)}
+.fi-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(13px,1.7vw,19px);letter-spacing:2px;color:var(--cream);margin-bottom:2px;transition:color .25s,transform .3s}
+.feat-item:hover .fi-name{color:var(--gold-lt);transform:translateX(8px)}
+.fi-desc{font-size:9px;font-weight:300;color:rgba(245,240,232,.28);line-height:1.65}
 
-/* ── S4 RESERVASI ─────────────────────────────────────── */
-#s4{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:7vh 56px 0;overflow-y:auto;text-align:center}
-.rv-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(28px,4.5vw,62px);font-weight:600;line-height:.88;letter-spacing:-0.5px;margin-bottom:6px;color:var(--cream)}
-.rv-title em{color:var(--gold);font-style:italic}
-.rv-sub{font-size:9px;font-weight:300;color:rgba(245,240,232,.25);letter-spacing:3px;margin-bottom:22px;font-family:'Bebas Neue',sans-serif;text-transform:uppercase}
+/* ── S4 RESERVASI ────────────────────────────────── */
+#s4{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:7vh 56px 0;text-align:center}
+.rv-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(28px,4.4vw,60px);font-weight:700;line-height:.88;letter-spacing:-.5px;margin-bottom:6px;color:var(--cream)}
+.rv-title em{color:var(--gold)}
+.rv-sub{font-family:'Bebas Neue',sans-serif;font-size:7.5px;letter-spacing:4px;color:rgba(245,240,232,.22);text-transform:uppercase;margin-bottom:18px}
 
-/* Testimonials */
-.testi-row{display:flex;gap:8px;width:100%;max-width:620px;margin-bottom:20px}
+.testi-row{display:flex;gap:8px;width:100%;max-width:640px;margin-bottom:16px}
 .tcard{
-  flex:1;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05);
-  padding:12px;text-align:left;
-  opacity:0;transform:perspective(900px) rotateX(28deg) translateZ(-120px);
-  transition:opacity .7s ease calc(var(--ti,0)*110ms), transform .8s cubic-bezier(.19,1,.22,1) calc(var(--ti,0)*110ms);
+  flex:1;background:rgba(255,255,255,.022);border:1px solid rgba(255,255,255,.05);padding:12px;text-align:left;
+  opacity:0;transform:perspective(900px) rotateX(32deg) translateZ(-130px);
+  transition:opacity .75s ease calc(var(--ti,0)*120ms),transform .85s cubic-bezier(.19,1,.22,1) calc(var(--ti,0)*120ms);
 }
-.sec.anim-in .tcard{opacity:1;transform:none}
-.sec.anim-out .tcard{opacity:0;transition-duration:.15s,.15s}
-.tcard-stars{color:var(--gold);font-size:8px;letter-spacing:1px;margin-bottom:5px}
-.tcard-q{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:9.5px;font-weight:400;color:rgba(245,240,232,.42);line-height:1.7;margin-bottom:6px}
-.tcard-name{font-family:'Bebas Neue',sans-serif;font-size:7px;letter-spacing:3px;color:rgba(200,146,42,.5)}
+.sec.anim-in  .tcard{opacity:1;transform:none}
+.sec.anim-out .tcard{opacity:0;transition-duration:.14s,.14s}
+.tcard-stars{color:var(--gold);font-size:9px;letter-spacing:1px;margin-bottom:6px}
+.tcard-q{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:9.5px;color:rgba(245,240,232,.38);line-height:1.75;margin-bottom:7px}
+.tcard-name{font-family:'Bebas Neue',sans-serif;font-size:7px;letter-spacing:3px;color:rgba(200,146,42,.45)}
 
-/* Booking form */
 .bk-wrap{
-  width:100%;max-width:520px;
-  opacity:0;transform:perspective(1000px) rotateX(28deg) translateZ(-120px);
-  transition:opacity .85s ease .15s, transform .9s cubic-bezier(.19,1,.22,1) .15s;
+  width:100%;max-width:540px;
+  opacity:0;transform:perspective(1000px) rotateX(30deg) translateZ(-130px);
+  transition:opacity .9s ease .18s,transform .95s cubic-bezier(.19,1,.22,1) .18s;
 }
-.sec.anim-in .bk-wrap{opacity:1;transform:none}
-.sec.anim-out .bk-wrap{opacity:0;transition-duration:.2s,.2s}
+.sec.anim-in  .bk-wrap{opacity:1;transform:none}
+.sec.anim-out .bk-wrap{opacity:0;transition-duration:.18s,.18s}
 .bk-form{display:grid;grid-template-columns:1fr 1fr;gap:7px;text-align:left}
-.fg{display:flex;flex-direction:column;gap:3px}
+.fg{display:flex;flex-direction:column;gap:4px}
 .fg.full{grid-column:1/-1}
-.fg label{font-family:'Bebas Neue',sans-serif;font-size:6px;letter-spacing:4px;text-transform:uppercase;color:rgba(200,146,42,.35)}
+.fg label{font-family:'Bebas Neue',sans-serif;font-size:6px;letter-spacing:4px;text-transform:uppercase;color:rgba(200,146,42,.32)}
 .fg input,.fg select,.fg textarea{
-  background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.07);
-  color:var(--cream);padding:9px 11px;font-size:11px;font-family:'DM Sans',sans-serif;
-  outline:none;transition:border-color .2s,background .2s;
+  background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.07);
+  color:var(--cream);padding:10px 12px;font-size:11px;font-family:'DM Sans',sans-serif;
+  outline:none;transition:border-color .2s,background .2s;-webkit-appearance:none;appearance:none;
 }
-.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold);background:rgba(200,146,42,.04)}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:rgba(200,146,42,.6);background:rgba(200,146,42,.04)}
 .fg select option{background:#0a0604}
-.fg textarea{resize:none;height:48px}
+.fg textarea{resize:none;height:46px}
 .btn-wa-rv{
-  grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:9px;
-  background:var(--gold);color:#080502;border:none;padding:13px;
-  font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:5px;
-  cursor:pointer;transition:background .2s,transform .1s;width:100%;margin-top:3px;
-  text-decoration:none;
+  grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:10px;
+  background:var(--gold);color:#080502;border:none;padding:14px;
+  font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:5px;
+  cursor:pointer;transition:background .22s,transform .1s,box-shadow .22s;
+  width:100%;margin-top:4px;text-decoration:none;
 }
-.btn-wa-rv:hover{background:var(--gold-lt)}
+.btn-wa-rv:hover{background:var(--gold-lt);box-shadow:0 4px 22px rgba(200,146,42,.35)}
 .btn-wa-rv:active{transform:scale(.98)}
-.btn-wa-rv svg{width:18px;height:18px;fill:#080502;flex-shrink:0}
-.bk-note{font-size:7px;color:rgba(245,240,232,.12);letter-spacing:2px;margin-top:10px;text-align:center;font-family:'Bebas Neue',sans-serif}
+.btn-wa-rv svg{width:17px;height:17px;fill:#080502;flex-shrink:0}
+.bk-note{font-size:6.5px;color:rgba(245,240,232,.1);letter-spacing:2.5px;margin-top:9px;text-align:center;font-family:'Bebas Neue',sans-serif}
 
-/* ── FLOATING WA ─────────────────────────────────────── */
+/* ── FLOATING WA ─────────────────────────────────── */
 #wa-float{
-  position:fixed;bottom:30px;right:26px;z-index:600;
-  width:50px;height:50px;border-radius:50%;
+  position:fixed;bottom:28px;right:24px;z-index:600;
+  width:48px;height:48px;border-radius:50%;
   background:linear-gradient(135deg,#25d366,#128c7e);
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 20px rgba(37,211,102,.4);
+  box-shadow:0 4px 18px rgba(37,211,102,.38);
   text-decoration:none;transition:transform .22s,box-shadow .22s;
-  animation:waPulse 3s ease-in-out infinite;
+  animation:wap 3.2s ease-in-out infinite;
 }
-#wa-float:hover{transform:scale(1.1);box-shadow:0 6px 30px rgba(37,211,102,.6)}
-#wa-float svg{width:24px;height:24px;fill:#fff}
-@keyframes waPulse{
-  0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.4)}
-  50%{box-shadow:0 4px 28px rgba(37,211,102,.7),0 0 0 7px rgba(37,211,102,.1)}
-}
+#wa-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(37,211,102,.6)}
+#wa-float svg{width:22px;height:22px;fill:#fff}
+@keyframes wap{0%,100%{box-shadow:0 4px 18px rgba(37,211,102,.38)}
+  55%{box-shadow:0 4px 26px rgba(37,211,102,.65),0 0 0 8px rgba(37,211,102,.09)}}
 
-/* ── RESPONSIVE ─────────────────────────────────────── */
+/* ── RESPONSIVE ──────────────────────────────────── */
 @media(max-width:768px){
   nav{padding:14px 18px}
   .nav-links{display:none}
   #s0{max-width:100%;padding:0 20px 10vh}
-  #s1,#s3{padding:0 20px}
-  #s2{padding:0 20px;align-items:flex-start;text-align:left}
+  #s1,#s3{padding:0 18px}
+  #s2{padding:0 18px;align-items:flex-start}
+  #s2 .ab-inner{max-width:100%;text-align:left}
   #s2 .lbl{flex-direction:row}
-  #s2 .lbl::before{display:block}
-  #s2 .lbl::after{display:none}
-  .ab-inner{max-width:100%;text-align:left}
-  #s4{padding:56px 16px 20px}
+  #s2 .lbl::before{display:block}#s2 .lbl::after{display:none}
+  #s4{padding:50px 16px 0}
   .menu-row{flex-direction:column;gap:8px}
-  .menu-card{flex:none}
   .ab-values{grid-template-columns:1fr 1fr}
-  .testi-row{flex-direction:column;gap:6px}
+  .testi-row{flex-direction:column;gap:7px}
   .bk-form{grid-template-columns:1fr}
-  .h-title{font-size:clamp(32px,9vw,52px)}
-  .m-title{font-size:clamp(22px,7vw,40px)}
-  .ab-quote{font-size:clamp(16px,5.5vw,28px)}
-  .kc-title{font-size:clamp(20px,7vw,38px)}
-  .rv-title{font-size:clamp(24px,8vw,44px)}
+  .h-title{font-size:clamp(34px,9vw,54px)}
+  .m-title,.kc-title{font-size:clamp(22px,7vw,38px)}
+  .ab-quote{font-size:clamp(16px,5.5vw,26px)}
+  .rv-title{font-size:clamp(26px,8vw,44px)}
   #pbar{display:none}
   #dots{right:8px}
-  #shint{right:18px}
-  #ltop,#lbot{height:3vh}
+  #shint{right:16px}
+  #ltop{height:5vh}#lbot{height:4vh}
 }
 @media(max-width:480px){
   .ab-values{grid-template-columns:1fr}
   .feat-item{column-gap:10px}
+  #s4{padding:44px 14px 0}
 }
 </style>
 </head>
@@ -310,12 +335,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:22px 56px;display:fl
 <!-- LOADER -->
 <div id="loader">
   <div class="ld-logo">Adnan's Restaurant</div>
-  <div class="ld-tag">Fine Dining Experience</div>
+  <div class="ld-sub">Fine Dining Experience</div>
   <div class="ld-bar"><div class="ld-fill" id="lf"></div></div>
   <div class="ld-pct" id="ln">0%</div>
 </div>
 
-<!-- LAYERS -->
+<!-- BACKGROUND LAYERS -->
 <canvas id="bgcanvas"></canvas>
 <canvas id="cv"></canvas>
 <div id="vig"></div>
@@ -325,7 +350,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:22px 56px;display:fl
 <div id="lbot"></div>
 
 <!-- FLOATING WA -->
-<a id="wa-float" href="https://wa.me/628231935075?text=Halo%20Adnan's%20Restaurant%2C%20saya%20ingin%20reservasi%20meja!" target="_blank" rel="noopener" aria-label="Reservasi via WhatsApp">
+<a id="wa-float" href="https://wa.me/628231935075?text=Halo%20Adnan's%20Restaurant%2C%20saya%20ingin%20reservasi%20meja!" target="_blank" rel="noopener" aria-label="Reservasi WhatsApp">
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
@@ -341,19 +366,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:22px 56px;display:fl
   </ul>
 </nav>
 
-<!-- SCROLL CONTAINER -->
+<!-- SCROLL + SECTIONS -->
 <div id="sb">
   <div id="stage">
 
     <!-- S0: HERO -->
     <section class="sec" id="s0">
       <p class="h-eyebrow">PENGALAMAN KULINER PREMIUM &nbsp;·&nbsp; JAKARTA</p>
-      <h1 class="h-title">ADNAN'S<br><span>RESTAURANT</span></h1>
+      <h1 class="h-title">ADNAN'S<br><span class="gold">RESTAURANT</span></h1>
       <p class="h-sub">Di mana setiap momen<br>menjadi kenangan abadi</p>
       <p class="h-tag">FINE DINING &nbsp;·&nbsp; OPEN KITCHEN &nbsp;·&nbsp; RESERVASI TERSEDIA</p>
     </section>
 
-    <!-- S1: MENU UNGGULAN -->
+    <!-- S1: MENU -->
     <section class="sec" id="s1">
       <p class="lbl">Menu Unggulan</p>
       <h2 class="m-title">Cita Rasa yang<br>Berbicara Sendiri</h2>
@@ -361,7 +386,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:22px 56px;display:fl
         <div class="menu-card" style="--mc:0">
           <div class="mc-cat">Signature · Main Course</div>
           <div class="mc-name">Wagyu Tenderloin</div>
-          <div class="mc-desc">Grilled sempurna dengan herb butter Perancis, served dengan roasted vegetables segar</div>
+          <div class="mc-desc">Grilled sempurna dengan herb butter Perancis, served dengan roasted vegetables segar pilihan</div>
           <div class="mc-price">Rp 285.000 <small>per porsi</small></div>
         </div>
         <div class="menu-card" style="--mc:1">
@@ -373,7 +398,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:22px 56px;display:fl
         <div class="menu-card" style="--mc:2">
           <div class="mc-cat">Seafood · Fresh Daily</div>
           <div class="mc-name">Pan-Seared Salmon</div>
-          <div class="mc-desc">Salmon Atlantik fillet dengan lemon butter, capers, dan wild herb garden salad</div>
+          <div class="mc-desc">Salmon Atlantik fillet dengan lemon butter, capers, dan wild herb garden salad segar</div>
           <div class="mc-price">Rp 195.000 <small>per porsi</small></div>
         </div>
         <div class="menu-card" style="--mc:3">
@@ -385,65 +410,29 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:22px 56px;display:fl
       </div>
     </section>
 
-    <!-- S2: TENTANG KAMI -->
+    <!-- S2: TENTANG -->
     <section class="sec" id="s2">
       <div class="ab-inner">
         <p class="lbl">Tentang Kami</p>
         <blockquote class="ab-quote">"Setiap hidangan adalah karya seni yang lahir dari <em>dedikasi tanpa batas</em>"</blockquote>
         <p class="ab-body">Adnan's Restaurant lahir dari keyakinan bahwa makan bukan sekadar mengisi perut — melainkan sebuah perjalanan rasa, cerita, dan kenangan bersama orang-orang tercinta. Kami menghadirkan pengalaman fine dining yang hangat dan personal di jantung Jakarta.</p>
         <div class="ab-values">
-          <div class="av-item" style="--vi:0">
-            <span class="av-icon">🌿</span>
-            <div class="av-name">Bahan Premium</div>
-            <div class="av-desc">Dipilih langsung dari farm dan pasar terpercaya setiap pagi</div>
-          </div>
-          <div class="av-item" style="--vi:1">
-            <span class="av-icon">👨‍🍳</span>
-            <div class="av-name">Chef Berpengalaman</div>
-            <div class="av-desc">5+ tahun pengalaman di dapur fine dining internasional</div>
-          </div>
-          <div class="av-item" style="--vi:2">
-            <span class="av-icon">✨</span>
-            <div class="av-name">Suasana Eksklusif</div>
-            <div class="av-desc">Dirancang khusus untuk momen yang tak ingin kamu lupakan</div>
-          </div>
+          <div class="av-item" style="--vi:0"><span class="av-icon">🌿</span><div class="av-name">Bahan Premium</div><div class="av-desc">Dipilih langsung dari farm dan pasar terpercaya setiap pagi</div></div>
+          <div class="av-item" style="--vi:1"><span class="av-icon">👨‍🍳</span><div class="av-name">Chef Bersertifikat</div><div class="av-desc">5+ tahun pengalaman di dapur fine dining internasional</div></div>
+          <div class="av-item" style="--vi:2"><span class="av-icon">✨</span><div class="av-name">Suasana Eksklusif</div><div class="av-desc">Dirancang untuk momen yang tak ingin kamu lupakan</div></div>
         </div>
       </div>
     </section>
 
-    <!-- S3: DAPUR KAMI -->
+    <!-- S3: DAPUR -->
     <section class="sec" id="s3">
       <p class="lbl">Dapur Kami</p>
       <h2 class="kc-title">Standar Tertinggi,<br>Setiap Hari</h2>
       <div class="feat-list">
-        <div class="feat-item" style="--fi:0">
-          <div class="fi-num">01</div>
-          <div class="fi-wrap">
-            <div class="fi-name">BAHAN SEGAR SETIAP PAGI</div>
-            <div class="fi-desc">Langsung dari farm organik dan pasar premium terpercaya — tidak ada kompromi untuk kesegaran</div>
-          </div>
-        </div>
-        <div class="feat-item" style="--fi:1">
-          <div class="fi-num">02</div>
-          <div class="fi-wrap">
-            <div class="fi-name">OPEN KITCHEN CONCEPT</div>
-            <div class="fi-desc">Transparansi adalah kebanggaan kami. Lihat langsung proses memasak dari meja Anda</div>
-          </div>
-        </div>
-        <div class="feat-item" style="--fi:2">
-          <div class="fi-num">03</div>
-          <div class="fi-wrap">
-            <div class="fi-name">5 CHEF BERSERTIFIKAT</div>
-            <div class="fi-desc">Dengan pengalaman internasional dan passion yang tulus untuk menghadirkan yang terbaik</div>
-          </div>
-        </div>
-        <div class="feat-item" style="--fi:3">
-          <div class="fi-num">04</div>
-          <div class="fi-wrap">
-            <div class="fi-name">HIGIENITAS TERJAMIN</div>
-            <div class="fi-desc">Standar kebersihan tertinggi yang diaudit secara berkala — untuk ketenangan pikiran Anda</div>
-          </div>
-        </div>
+        <div class="feat-item" style="--fi:0"><div class="fi-num">01</div><div><div class="fi-name">BAHAN SEGAR SETIAP PAGI</div><div class="fi-desc">Langsung dari farm organik dan pasar premium — tidak ada kompromi untuk kesegaran</div></div></div>
+        <div class="feat-item" style="--fi:1"><div class="fi-num">02</div><div><div class="fi-name">OPEN KITCHEN CONCEPT</div><div class="fi-desc">Transparansi adalah kebanggaan kami. Lihat langsung proses memasak dari meja Anda</div></div></div>
+        <div class="feat-item" style="--fi:2"><div class="fi-num">03</div><div><div class="fi-name">5 CHEF BERSERTIFIKAT</div><div class="fi-desc">Dengan pengalaman internasional dan passion tulus untuk menghadirkan yang terbaik</div></div></div>
+        <div class="feat-item" style="--fi:3"><div class="fi-num">04</div><div><div class="fi-name">HIGIENITAS TERJAMIN</div><div class="fi-desc">Standar kebersihan tertinggi yang diaudit secara berkala — untuk ketenangan pikiran Anda</div></div></div>
       </div>
     </section>
 
@@ -455,23 +444,23 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:22px 56px;display:fl
       <div class="testi-row">
         <div class="tcard" style="--ti:0">
           <div class="tcard-stars">★★★★★</div>
-          <div class="tcard-q">"Pengalaman makan malam yang benar-benar luar biasa. Steaknya sempurna, pelayanannya hangat."</div>
+          <div class="tcard-q">"Pengalaman makan malam yang luar biasa. Steaknya sempurna, pelayanannya sangat hangat."</div>
           <div class="tcard-name">RINA MAHARANI</div>
         </div>
         <div class="tcard" style="--ti:1">
           <div class="tcard-stars">★★★★★</div>
-          <div class="tcard-q">"Suasananya romantis banget. Kami pilih Adnan's untuk anniversary dan tidak menyesal sama sekali."</div>
+          <div class="tcard-q">"Suasananya romantis banget. Kami pilih Adnan's untuk anniversary dan tidak menyesal."</div>
           <div class="tcard-name">BAGAS & TARI</div>
         </div>
         <div class="tcard" style="--ti:2">
           <div class="tcard-stars">★★★★★</div>
-          <div class="tcard-q">"Chef rekomendasinya selalu tepat sasaran. Truffle pasta-nya... saya tidak bisa berhenti makan."</div>
+          <div class="tcard-q">"Truffle pasta-nya... saya tidak bisa berhenti makan. Akan selalu kembali ke sini."</div>
           <div class="tcard-name">AHMAD KHALID</div>
         </div>
       </div>
 
       <div class="bk-wrap">
-        <form class="bk-form" onsubmit="onBook(event)">
+        <form class="bk-form" onsubmit="return onBook(event)">
           <div class="fg"><label>Nama Lengkap</label><input id="bk-nama" type="text" placeholder="Nama Anda" required/></div>
           <div class="fg"><label>No. WhatsApp</label><input id="bk-wa" type="tel" placeholder="+62 8xx xxxx xxxx" required/></div>
           <div class="fg"><label>Tanggal</label><input id="bk-tgl" type="date" required/></div>
@@ -488,11 +477,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:22px 56px;display:fl
             <select id="bk-tamu" required>
               <option value="">— Pilih —</option>
               <option>1 orang</option><option>2 orang</option><option>3 orang</option>
-              <option>4 orang</option><option>5-6 orang</option><option>7+ orang</option>
+              <option>4 orang</option><option>5–6 orang</option><option>7+ orang</option>
             </select>
           </div>
           <div class="fg"><label>Catatan Khusus</label><input id="bk-note" type="text" placeholder="Ulang tahun, alergi, permintaan khusus..."/></div>
-          <a class="btn-wa-rv full" id="bk-btn" href="#" onclick="return onBook(event)">
+          <a class="btn-wa-rv full" href="#" onclick="return onBook(event)">
             <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             RESERVASI SEKARANG
           </a>
@@ -501,416 +490,398 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:22px 56px;display:fl
       </div>
     </section>
 
-  </div><!-- /stage -->
-</div><!-- /sb -->
+  </div>
+</div>
 
-<!-- PROGRESS -->
+<!-- PROGRESS / DOTS / LABELS -->
 <div id="pbar"><div id="pbar-f"></div></div>
 <div id="dots">
-  <div class="dot on" onclick="goScene(0)" title="Hero"></div>
-  <div class="dot" onclick="goScene(1)" title="Menu"></div>
-  <div class="dot" onclick="goScene(2)" title="Tentang"></div>
-  <div class="dot" onclick="goScene(3)" title="Dapur"></div>
-  <div class="dot" onclick="goScene(4)" title="Reservasi"></div>
+  <div class="dot on" onclick="goScene(0)"></div>
+  <div class="dot"    onclick="goScene(1)"></div>
+  <div class="dot"    onclick="goScene(2)"></div>
+  <div class="dot"    onclick="goScene(3)"></div>
+  <div class="dot"    onclick="goScene(4)"></div>
 </div>
 <div id="scene-lbl">EKSTERIOR · GOLDEN HOUR</div>
 <div id="shint"><span>SCROLL</span><div class="sh-l"></div></div>
 
+<!-- ▼▼▼ FIX: External libs loaded SYNCHRONOUSLY before inline script ▼▼▼ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
 <script>
-// ══════════════════════════════════════════════════════
-//  0. MOBILE DETECTION — must be first
-// ══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════
+//  0. MOBILE DETECTION — ALWAYS FIRST
+// ════════════════════════════════════════════════════
 const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768;
 const frameFolder = isMobile ? 'frames-mobile' : 'frames';
 const FW = isMobile ? 540 : 960;
 const FH = isMobile ? 960 : 540;
 
-// ══════════════════════════════════════════════════════
-//  1. WORD-SPLIT (recursive, handles <br> <em> <span>)
-// ══════════════════════════════════════════════════════
-document.querySelectorAll('.h-eyebrow,.h-title,.h-sub,.h-tag,.m-title,.ab-quote,.ab-body,.kc-title,.rv-title,.rv-sub').forEach(el=>{
-  function wrapWords(node, counter){
+// ════════════════════════════════════════════════════
+//  1. WORD-SPLIT for 3D stagger
+// ════════════════════════════════════════════════════
+document.querySelectorAll(
+  '.h-eyebrow,.h-title,.h-sub,.h-tag,.m-title,.ab-quote,.ab-body,.kc-title,.rv-title,.rv-sub'
+).forEach(el=>{
+  function wrapWords(node, ctr){
     if(node.nodeType===3){
-      const words=node.textContent.replace(/\s+/,' ').trim().split(' ').filter(Boolean);
+      const words=node.textContent.split(/\s+/).filter(Boolean);
       if(!words.length) return document.createTextNode('');
       const frag=document.createDocumentFragment();
       words.forEach((w,i)=>{
         if(i>0) frag.appendChild(document.createTextNode(' '));
         const sp=document.createElement('span');
-        sp.className='wd';
-        sp.style.setProperty('--i',counter.n++);
-        sp.textContent=w;
+        sp.className='wd'; sp.style.setProperty('--i',ctr.n++); sp.textContent=w;
         frag.appendChild(sp);
       });
       return frag;
     }
     if(node.nodeType===1){
       if(node.nodeName==='BR') return document.createTextNode(' ');
-      const clone=node.cloneNode(false);
-      node.childNodes.forEach(child=>clone.appendChild(wrapWords(child,counter)));
-      return clone;
+      const cl=node.cloneNode(false);
+      node.childNodes.forEach(c=>cl.appendChild(wrapWords(c,ctr)));
+      return cl;
     }
     return node.cloneNode(true);
   }
-  const counter={n:0};
-  const frag=document.createDocumentFragment();
-  el.childNodes.forEach(child=>frag.appendChild(wrapWords(child,counter)));
-  el.innerHTML='';
-  el.appendChild(frag);
+  const ctr={n:0}, frag=document.createDocumentFragment();
+  el.childNodes.forEach(c=>frag.appendChild(wrapWords(c,ctr)));
+  el.innerHTML=''; el.appendChild(frag);
 });
 
-// ══════════════════════════════════════════════════════
-//  2. FRAME PLAYER — ImageBitmap canvas scrubbing
-// ══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════
+//  2. CANVAS FRAME SCRUBBING
+// ════════════════════════════════════════════════════
 const TOTAL_FRAMES = 241;
 const bgCanvas = document.getElementById('bgcanvas');
 const bgCtx    = bgCanvas.getContext('2d');
 const frames   = new Array(TOTAL_FRAMES);
 const bitmaps  = new Array(TOTAL_FRAMES);
-const hasBitmapAPI = typeof createImageBitmap === 'function';
-let loadedCount = 0, allLoaded = false, currentFrameIdx = 0;
+const hasBM    = typeof createImageBitmap === 'function';
+let loadedCount=0, readyToPlay=false, currentIdx=0;
 
-function resizeBgCanvas(){
-  bgCanvas.width  = window.innerWidth;
-  bgCanvas.height = window.innerHeight;
-  drawFrame(currentFrameIdx);
+function resizeBg(){
+  bgCanvas.width=innerWidth; bgCanvas.height=innerHeight;
+  drawFrame(currentIdx);
 }
-window.addEventListener('resize', resizeBgCanvas);
-resizeBgCanvas();
+window.addEventListener('resize', resizeBg, {passive:true});
+resizeBg();
 
 function drawFrame(idx){
   const cw=bgCanvas.width, ch=bgCanvas.height;
-  const scale=Math.max(cw/FW, ch/FH);
-  const srcW=cw/scale, srcH=ch/scale;
-  const srcX=(FW-srcW)/2, srcY=(FH-srcH)/2;
+  const sc=Math.max(cw/FW, ch/FH);
+  const sW=cw/sc, sH=ch/sc, sX=(FW-sW)/2, sY=(FH-sH)/2;
   bgCtx.imageSmoothingEnabled=true;
   bgCtx.imageSmoothingQuality=isMobile?'low':'high';
   let src=bitmaps[idx]||(frames[idx]?.complete?frames[idx]:null);
   if(!src){
-    for(let d=1;d<80;d++){
+    for(let d=1;d<100;d++){
       const a=bitmaps[idx-d]||(frames[idx-d]?.complete?frames[idx-d]:null);
       const b=bitmaps[idx+d]||(frames[idx+d]?.complete?frames[idx+d]:null);
       if(a){src=a;break;} if(b){src=b;break;}
     }
   }
   if(!src) return;
-  bgCtx.drawImage(src, srcX, srcY, srcW, srcH, 0, 0, cw, ch);
+  bgCtx.drawImage(src, sX,sY,sW,sH, 0,0,cw,ch);
 }
 
-const lfEl      = document.getElementById('lf');
-const lnEl      = document.getElementById('ln');
-const loaderDiv = document.getElementById('loader');
-const shintDiv  = document.getElementById('shint');
+const lfEl=document.getElementById('lf');
+const lnEl=document.getElementById('ln');
+const loaderEl=document.getElementById('loader');
+const shintEl=document.getElementById('shint');
 
-function onFrameLoad(){
+function onLoad(){
   loadedCount++;
   const pct=Math.round(loadedCount/TOTAL_FRAMES*100);
-  lfEl.style.width=pct+'%';
-  lnEl.textContent=pct+'%';
+  lfEl.style.width=pct+'%'; lnEl.textContent=pct+'%';
   if(loadedCount===1) drawFrame(0);
-  if(loadedCount===25){
-    allLoaded=true;
-    setTimeout(()=>{ loaderDiv.classList.add('out'); shintDiv.classList.add('vis'); }, 500);
+  if(loadedCount===20){
+    readyToPlay=true;
+    setTimeout(()=>{ loaderEl.classList.add('out'); shintEl.classList.add('vis'); }, 400);
   }
-  if(loadedCount===TOTAL_FRAMES) allLoaded=true;
+  if(loadedCount===TOTAL_FRAMES) readyToPlay=true;
 }
 
-setTimeout(()=>loaderDiv.classList.add('rdy'), 100);
+setTimeout(()=>loaderEl.classList.add('rdy'), 80);
 
-let nextToLoad=0;
-const BATCH=isMobile?10:18;
+let nxt=0;
+const BATCH=isMobile?10:20;
 function loadBatch(){
-  if(nextToLoad>=TOTAL_FRAMES) return;
-  const end=Math.min(nextToLoad+BATCH, TOTAL_FRAMES);
-  for(let i=nextToLoad;i<end;i++){
-    const idx=i;
-    const img=new Image();
+  if(nxt>=TOTAL_FRAMES) return;
+  const end=Math.min(nxt+BATCH, TOTAL_FRAMES);
+  for(let i=nxt;i<end;i++){
+    const idx=i, img=new Image();
     img.crossOrigin='anonymous';
     img.onload=()=>{
       frames[idx]=img;
-      if(hasBitmapAPI){
-        createImageBitmap(img)
-          .then(bm=>{ bitmaps[idx]=bm; })
-          .catch(()=>{})
-          .finally(()=>{ onFrameLoad(); loadBatch(); });
-      } else { onFrameLoad(); loadBatch(); }
+      if(hasBM){
+        createImageBitmap(img).then(bm=>{ bitmaps[idx]=bm; }).catch(()=>{}).finally(()=>{ onLoad(); loadBatch(); });
+      } else { onLoad(); loadBatch(); }
     };
-    img.onerror=()=>{ onFrameLoad(); loadBatch(); };
-    img.src=`${frameFolder}/f${String(i+1).padStart(4,'0')}.jpg`;
+    img.onerror=()=>{ onLoad(); loadBatch(); };
+    img.src=`${frameFolder}/f${String(idx+1).padStart(4,'0')}.jpg`;
   }
-  nextToLoad=end;
+  nxt=end;
 }
+// 5 parallel batch chains
 loadBatch(); loadBatch(); loadBatch(); loadBatch(); loadBatch();
 
-// ══════════════════════════════════════════════════════
-//  3. THREE.JS — warm atmospheric particles (desktop)
-// ══════════════════════════════════════════════════════
-const cv = document.getElementById('cv');
-let threeRenderer, threeScene, threeCamera, threeParticles, threeGlow, threeClock;
+// ════════════════════════════════════════════════════
+//  3. THREE.JS PARTICLES — desktop only (warm motes)
+// ════════════════════════════════════════════════════
+let renderer3, scene3, cam3, dust1, dust2, clk3;
 
-if(!isMobile){
-  threeRenderer = new THREE.WebGLRenderer({canvas:cv, antialias:false, alpha:true, powerPreference:'high-performance'});
-  threeRenderer.setPixelRatio(Math.min(devicePixelRatio, 1.6));
-  threeRenderer.setSize(innerWidth, innerHeight);
-  threeRenderer.setClearColor(0x000000, 0);
-  threeScene  = new THREE.Scene();
-  threeCamera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, .1, 60);
-  threeCamera.position.set(0, 0, 8);
-  threeClock  = new THREE.Clock();
+if(!isMobile && typeof THREE !== 'undefined'){
+  try{
+    const cv3=document.getElementById('cv');
+    renderer3=new THREE.WebGLRenderer({canvas:cv3,antialias:false,alpha:true,powerPreference:'high-performance'});
+    renderer3.setPixelRatio(Math.min(devicePixelRatio,1.6));
+    renderer3.setSize(innerWidth,innerHeight);
+    renderer3.setClearColor(0x000000,0);
+    scene3=new THREE.Scene();
+    cam3=new THREE.PerspectiveCamera(52,innerWidth/innerHeight,.1,60);
+    cam3.position.set(0,0,8);
+    clk3=new THREE.Clock();
 
-  window.addEventListener('resize',()=>{
-    threeRenderer.setSize(innerWidth, innerHeight);
-    threeCamera.aspect=innerWidth/innerHeight;
-    threeCamera.updateProjectionMatrix();
-  });
+    window.addEventListener('resize',()=>{
+      renderer3.setSize(innerWidth,innerHeight);
+      cam3.aspect=innerWidth/innerHeight;
+      cam3.updateProjectionMatrix();
+    },{passive:true});
 
-  function mkDust(n, spread, sz, op, col){
-    const geo=new THREE.BufferGeometry();
-    const pos=new Float32Array(n*3);
-    const vel=new Float32Array(n*3); // drift velocities
-    for(let i=0;i<n;i++){
-      pos[i*3]   =(Math.random()-.5)*spread;
-      pos[i*3+1] =(Math.random()-.5)*spread*.5;
-      pos[i*3+2] =(Math.random()-.5)*spread*.6;
-      vel[i*3]   =(Math.random()-.5)*.0003;
-      vel[i*3+1] = Math.random()*.0004+.0001; // slow upward
-      vel[i*3+2] =(Math.random()-.5)*.0002;
+    function mkCloud(n,spread,sz,op,col){
+      const geo=new THREE.BufferGeometry();
+      const pos=new Float32Array(n*3), vel=new Float32Array(n*3);
+      for(let i=0;i<n;i++){
+        pos[i*3]  =(Math.random()-.5)*spread;
+        pos[i*3+1]=(Math.random()-.5)*spread*.6;
+        pos[i*3+2]=(Math.random()-.5)*spread*.55;
+        vel[i*3]  =(Math.random()-.5)*.00035;
+        vel[i*3+1]= Math.random()*.00045+.00015;
+        vel[i*3+2]=(Math.random()-.5)*.00025;
+      }
+      geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+      geo.userData.vel=vel;
+      const mat=new THREE.PointsMaterial({size:sz,color:col,transparent:true,opacity:op,sizeAttenuation:true,depthWrite:false});
+      return new THREE.Points(geo,mat);
     }
-    geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
-    geo.userData.vel = vel;
-    const mat=new THREE.PointsMaterial({size:sz,color:col,transparent:true,opacity:op,sizeAttenuation:true,depthWrite:false});
-    return new THREE.Points(geo,mat);
-  }
 
-  // Warm golden motes — fine dining candlelight atmosphere
-  threeParticles = mkDust(500, 22, .045, .22, 0xC8922A);
-  threeGlow      = mkDust(80,  16, .12,  .08, 0xF0D080);
-  threeScene.add(threeParticles, threeGlow);
-
-  const ambL = new THREE.AmbientLight(0xfff0d0, .6);
-  threeScene.add(ambL);
+    dust1=mkCloud(600,24,.05,.3,0xC8922A);   // main gold motes
+    dust2=mkCloud(100,18,.14,.1,0xF0D080);   // bright highlights
+    scene3.add(dust1,dust2);
+    scene3.add(new THREE.AmbientLight(0xfff0d0,.5));
+  } catch(e){ console.warn('Three.js init failed:',e); }
 }
 
-// ══════════════════════════════════════════════════════
-//  4. SCROLL STATE + ZONES
-// ══════════════════════════════════════════════════════
-const sbEl      = document.getElementById('sb');
-const pbarF     = document.getElementById('pbar-f');
-const sceneLbl  = document.getElementById('scene-lbl');
-const gradeEl   = document.getElementById('grade');
-const scanwashEl= document.getElementById('scanwash');
-let rawP=0, smoothP=0, prevP=0, curDotIdx=0, curZoneIdx=-1;
-const dotEls    = document.querySelectorAll('.dot');
-let prevStates  = new Array(5).fill('out');
+// ════════════════════════════════════════════════════
+//  4. ZONES + SCROLL STATE
+// ════════════════════════════════════════════════════
+const sbEl     =document.getElementById('sb');
+const pbarF    =document.getElementById('pbar-f');
+const sceneLbl =document.getElementById('scene-lbl');
+const gradeEl  =document.getElementById('grade');
+const swEl     =document.getElementById('scanwash');
+
+let rawP=0, smoothP=0, curDot=0, curZone=-1;
+const dotEls   =document.querySelectorAll('.dot');
+const prevSt   =new Array(5).fill('out');
 
 const ZONES=[
   {id:'s0', in0:-.01, in1:.00, out0:.22, out1:.28},
   {id:'s1', in0:.24,  in1:.30, out0:.43, out1:.48},
-  {id:'s2', in0:.43,  in1:.49, out0:.62, out1:.68},
+  {id:'s2', in0:.43,  in1:.49, out0:.62, out1:.67},
   {id:'s3', in0:.62,  in1:.67, out0:.81, out1:.86},
-  {id:'s4', in0:.82,  in1:.87, out0:1.0, out1:1.0},
+  {id:'s4', in0:.82,  in1:.87, out0:1.0, out1:1.0 },
 ];
-const SCENE_CFG=[
-  {lbl:'EKSTERIOR · GOLDEN HOUR',    grade:'rgba(200,146,42,.35)', grOp:.18},
-  {lbl:'MENU · CITA RASA',           grade:'rgba(160,90,10,.42)',  grOp:.20},
-  {lbl:'TENTANG · KISAH KAMI',       grade:'rgba(25,18,5,.48)',    grOp:.22},
-  {lbl:'DAPUR · STANDAR KAMI',       grade:'rgba(255,210,120,.28)',grOp:.18},
-  {lbl:'RESERVASI · MEJA TERBAIKMU', grade:'rgba(200,146,42,.32)', grOp:.18},
+const CFG=[
+  {lbl:'EKSTERIOR · GOLDEN HOUR',    grade:'rgba(200,146,42,.3)', grOp:.22},
+  {lbl:'MENU · CITA RASA',           grade:'rgba(140,70,5,.4)',   grOp:.24},
+  {lbl:'TENTANG · KISAH KAMI',       grade:'rgba(20,12,2,.45)',   grOp:.26},
+  {lbl:'DAPUR · STANDAR KAMI',       grade:'rgba(240,200,100,.28)',grOp:.2},
+  {lbl:'RESERVASI · MEJA TERBAIKMU', grade:'rgba(200,146,42,.3)', grOp:.22},
 ];
 
 const cl01=v=>Math.max(0,Math.min(1,v));
-const smooth3=t=>t*t*(3-2*t);
-function zOpS(p,z){
+const s3=t=>t*t*(3-2*t);
+function zOp(p,z){
   const fi=cl01((p-z.in0)/Math.max(z.in1-z.in0,.001));
   const fo=cl01(1-(p-z.out0)/Math.max(z.out1-z.out0,.001));
-  return smooth3(Math.min(fi,fo));
+  return s3(Math.min(fi,fo));
 }
 
-function flashWash(){
-  scanwashEl.style.transition='opacity .08s';
-  scanwashEl.style.opacity='.7';
-  setTimeout(()=>{ scanwashEl.style.transition='opacity .5s'; scanwashEl.style.opacity='0'; }, 130);
+function scanFlash(){
+  swEl.style.transition='opacity .07s'; swEl.style.opacity='.75';
+  setTimeout(()=>{ swEl.style.transition='opacity .6s'; swEl.style.opacity='0'; },120);
 }
 
 function applyZones(p){
-  const ops=ZONES.map(z=>zOpS(p,z));
-  let maxI=0, maxOp=0;
-  ops.forEach((op,i)=>{ if(op>maxOp){maxOp=op;maxI=i;} });
-  const cfg=SCENE_CFG[maxI];
+  const ops=ZONES.map(z=>zOp(p,z));
+  let mi=0, mo=0; ops.forEach((o,i)=>{ if(o>mo){mo=o;mi=i;} });
+  const cfg=CFG[mi];
   gradeEl.style.background=cfg.grade;
-  gradeEl.style.opacity=cfg.grOp*(maxOp||.4);
+  gradeEl.style.opacity=String(cfg.grOp*(mo||.5));
   if(cfg.lbl!==sceneLbl.textContent) sceneLbl.textContent=cfg.lbl;
-  if(maxI!==curZoneIdx){ flashWash(); curZoneIdx=maxI; }
+  if(mi!==curZone){ scanFlash(); curZone=mi; }
   ZONES.forEach((z,i)=>{
     const el=document.getElementById(z.id); if(!el) return;
     const op=ops[i];
-    el.style.opacity=op;
-    const st=op>.05?'in':'out';
-    if(st!==prevStates[i]){
-      prevStates[i]=st;
+    el.style.opacity=String(op);
+    const st=op>.04?'in':'out';
+    if(st!==prevSt[i]){
+      prevSt[i]=st;
       el.classList.toggle('vis',st==='in');
       if(st==='in'){ el.classList.remove('anim-out'); void el.offsetWidth; el.classList.add('anim-in'); }
-      else         { el.classList.remove('anim-in');  el.classList.add('anim-out'); }
+      else          { el.classList.remove('anim-in');  el.classList.add('anim-out'); }
     }
   });
 }
 
+// ▼ Initial call — ensures S0 is visible immediately, no scroll needed ▼
+applyZones(0);
+
 window.addEventListener('scroll',()=>{
   const ms=sbEl.scrollHeight-innerHeight;
-  rawP=Math.max(0,Math.min(1,window.scrollY/ms));
+  rawP=Math.max(0,Math.min(1,scrollY/ms));
   pbarF.style.height=(rawP*100)+'%';
   let ad=0;
-  for(let i=0;i<ZONES.length;i++) if(rawP>=ZONES[i].in0) ad=i;
-  if(ad!==curDotIdx){ curDotIdx=ad; dotEls.forEach((d,i)=>d.classList.toggle('on',i===ad)); }
-  if(isMobile) scheduleMobileTick();
+  for(let i=0;i<ZONES.length;i++) if(rawP>=(ZONES[i].in0+.001)) ad=i;
+  if(ad!==curDot){ curDot=ad; dotEls.forEach((d,i)=>d.classList.toggle('on',i===ad)); }
+  if(isMobile) schedMobileTick();
 },{passive:true});
 
 function goScene(i){
   const ms=sbEl.scrollHeight-innerHeight;
-  window.scrollTo({top:(ZONES[i].in0+.005)*ms,behavior:'instant'});
-  rawP=ZONES[i].in0+.005;
+  window.scrollTo({top:(ZONES[i].in0+.005)*ms,behavior:'smooth'});
 }
 
-// ══════════════════════════════════════════════════════
-//  5. MOBILE TICK — rAF throttled, no WebGL
-// ══════════════════════════════════════════════════════
-let _mRafPending=false;
-function scheduleMobileTick(){
-  if(_mRafPending) return;
-  _mRafPending=true;
-  requestAnimationFrame(()=>{ _mRafPending=false; doMobileTick(rawP); });
-}
-function doMobileTick(p){
-  smoothP=p;
-  if(allLoaded){
-    const idx=Math.round(p*(TOTAL_FRAMES-1));
-    if(idx!==currentFrameIdx){ currentFrameIdx=idx; drawFrame(idx); }
-  }
-  applyZones(p);
+// ════════════════════════════════════════════════════
+//  5. MOBILE TICK (rAF-throttled, no WebGL)
+// ════════════════════════════════════════════════════
+let _mPend=false;
+function schedMobileTick(){
+  if(_mPend) return; _mPend=true;
+  requestAnimationFrame(()=>{
+    _mPend=false;
+    smoothP=rawP;
+    if(readyToPlay){
+      const idx=Math.round(rawP*(TOTAL_FRAMES-1));
+      if(idx!==currentIdx){ currentIdx=idx; drawFrame(idx); }
+    }
+    applyZones(rawP);
+  });
 }
 
-// ══════════════════════════════════════════════════════
-//  6. DESKTOP ANIMATE LOOP
-// ══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════
+//  6. DESKTOP rAF LOOP — smooth lerp + WebGL
+// ════════════════════════════════════════════════════
 const lerp=(a,b,t)=>a+(b-a)*t;
-const mouse={nx:0,ny:0};
-const curEl =document.getElementById('cur');
+const mouse={x:0,y:0,nx:0,ny:0};
+const curEl=document.getElementById('cur');
 const cur2El=document.getElementById('cur2');
-let c2x=innerWidth/2, c2y=innerHeight/2;
+let c2x=innerWidth/2,c2y=innerHeight/2;
 
 document.addEventListener('mousemove',e=>{
+  mouse.x=e.clientX; mouse.y=e.clientY;
   mouse.nx=(e.clientX/innerWidth-.5)*2;
   mouse.ny=(e.clientY/innerHeight-.5)*2;
-  if(curEl)  { curEl.style.left=e.clientX+'px';  curEl.style.top=e.clientY+'px'; }
-  if(cur2El) { c2x=lerp(c2x,e.clientX,.12); c2y=lerp(c2y,e.clientY,.12); cur2El.style.left=c2x+'px'; cur2El.style.top=c2y+'px'; }
-});
+},{passive:true});
 
-function animate(){
-  if(isMobile){ requestAnimationFrame(animate); return; }
-  requestAnimationFrame(animate);
+if(!isMobile){
+  function loop(){
+    requestAnimationFrame(loop);
+    const t=clk3?clk3.getElapsedTime():0;
 
-  const t = threeClock ? threeClock.getElapsedTime() : 0;
+    // cursor lag
+    c2x=lerp(c2x,mouse.x,.1); c2y=lerp(c2y,mouse.y,.1);
+    if(curEl){ curEl.style.left=mouse.x+'px'; curEl.style.top=mouse.y+'px'; }
+    if(cur2El){ cur2El.style.left=c2x+'px'; cur2El.style.top=c2y+'px'; }
 
-  // Smooth scroll lerp
-  smoothP += (rawP - smoothP) * .14;
-  const p = smoothP;
+    // smooth scroll
+    smoothP=lerp(smoothP,rawP,.11);
+    const p=smoothP;
 
-  // Video frame
-  if(allLoaded){
-    const idx=Math.round(p*(TOTAL_FRAMES-1));
-    if(idx!==currentFrameIdx){ currentFrameIdx=idx; drawFrame(idx); }
-  }
-
-  applyZones(p);
-
-  // Drift particles upward (candlelight feel)
-  if(threeParticles && threeGlow){
-    const pos=threeParticles.geometry.attributes.position.array;
-    const vel=threeParticles.geometry.userData.vel;
-    for(let i=0;i<pos.length;i+=3){
-      pos[i]   += vel[i];
-      pos[i+1] += vel[i+1];
-      pos[i+2] += vel[i+2];
-      if(pos[i+1]>6) pos[i+1]=-6; // wrap top → bottom
+    // video frame
+    if(readyToPlay){
+      const idx=Math.round(p*(TOTAL_FRAMES-1));
+      if(idx!==currentIdx){ currentIdx=idx; drawFrame(idx); }
     }
-    threeParticles.geometry.attributes.position.needsUpdate=true;
-    threeParticles.rotation.y = p*Math.PI*.8 + t*.008;
-    threeParticles.material.opacity = lerp(.10, .28, 1-p) + Math.sin(t*.4)*.04;
 
-    threeGlow.rotation.y = t*.005;
-    threeGlow.material.opacity = .05 + Math.sin(t*.3)*.03;
+    applyZones(p);
+
+    // particles
+    if(dust1 && dust2 && renderer3){
+      const pa=dust1.geometry.attributes.position.array;
+      const va=dust1.geometry.userData.vel;
+      for(let i=0;i<pa.length;i+=3){
+        pa[i]+=va[i]; pa[i+1]+=va[i+1]; pa[i+2]+=va[i+2];
+        if(pa[i+1]>7) pa[i+1]=-7;
+      }
+      dust1.geometry.attributes.position.needsUpdate=true;
+      dust1.rotation.y=p*Math.PI*.6+t*.007;
+      dust1.material.opacity=lerp(.18,.35,1-p)+Math.sin(t*.35)*.05;
+
+      dust2.rotation.y=t*.004;
+      dust2.material.opacity=.06+Math.sin(t*.28)*.04;
+
+      // subtle camera drift with mouse
+      cam3.position.x=lerp(cam3.position.x,mouse.nx*.08,.035);
+      cam3.position.y=lerp(cam3.position.y,-mouse.ny*.05,.035);
+      cam3.lookAt(0,0,0);
+
+      renderer3.render(scene3,cam3);
+    }
   }
-
-  // Camera subtle drift
-  threeCamera.position.x = lerp(threeCamera.position.x, mouse.nx*.06, .04);
-  threeCamera.position.y = lerp(threeCamera.position.y, -mouse.ny*.04, .04);
-  threeCamera.lookAt(0,0,0);
-
-  threeRenderer.render(threeScene, threeCamera);
+  loop();
 }
-animate();
 
-// ══════════════════════════════════════════════════════
-//  7. GSAP HOVER — menu cards + feature items
-// ══════════════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded',()=>{});
+// ════════════════════════════════════════════════════
+//  7. GSAP HOVER EFFECTS
+// ════════════════════════════════════════════════════
 setTimeout(()=>{
   if(typeof gsap==='undefined') return;
 
   // Menu cards
-  document.querySelectorAll('.menu-card').forEach(card=>{
-    const price=card.querySelector('.mc-price');
-    const name =card.querySelector('.mc-name');
-    card.addEventListener('mouseenter',()=>{
-      gsap.to(card,{y:-6, duration:.3, ease:'power2.out'});
-      gsap.to(price,{color:'#F0D080', scale:1.05, duration:.25, transformOrigin:'left center'});
-      gsap.to(name, {color:'#F0D080', duration:.25});
+  document.querySelectorAll('.menu-card').forEach(c=>{
+    const nm=c.querySelector('.mc-name'), pr=c.querySelector('.mc-price');
+    c.addEventListener('mouseenter',()=>{
+      gsap.to(c,{y:-7,duration:.3,ease:'power2.out'});
+      gsap.to([nm,pr],{color:'#F0D080',duration:.22});
     });
-    card.addEventListener('mouseleave',()=>{
-      gsap.to(card,{y:0, duration:.4});
-      gsap.to(price,{color:'#C8922A', scale:1, duration:.3});
-      gsap.to(name, {color:'#F5F0E8', duration:.3});
+    c.addEventListener('mouseleave',()=>{
+      gsap.to(c,{y:0,duration:.38});
+      gsap.to(nm,{color:'#F5F0E8',duration:.28});
+      gsap.to(pr,{color:'#C8922A',duration:.28});
     });
   });
 
   // Feature items
   document.querySelectorAll('.feat-item').forEach(item=>{
-    const name=item.querySelector('.fi-name');
-    const num =item.querySelector('.fi-num');
+    const n=item.querySelector('.fi-name'), num=item.querySelector('.fi-num');
     item.addEventListener('mouseenter',()=>{
-      gsap.to(name,{x:10, color:'#F0D080', duration:.25});
-      gsap.to(num, {color:'#C8922A', duration:.25});
+      gsap.to(num,{color:'#C8922A',duration:.22});
     });
     item.addEventListener('mouseleave',()=>{
-      gsap.to(name,{x:0, color:'#F5F0E8', duration:.3});
-      gsap.to(num, {color:'#7A4F10', duration:.3});
+      gsap.to(num,{color:'#7A4F10',duration:.28});
     });
   });
 
-  // Value cards
+  // Value items
   document.querySelectorAll('.av-item').forEach(item=>{
-    item.addEventListener('mouseenter',()=>{
-      gsap.to(item,{borderColor:'rgba(200,146,42,.4)', background:'rgba(20,12,2,.6)', y:-4, duration:.28});
-    });
-    item.addEventListener('mouseleave',()=>{
-      gsap.to(item,{borderColor:'rgba(200,146,42,.1)', background:'rgba(8,5,2,.4)', y:0, duration:.35});
-    });
+    item.addEventListener('mouseenter',()=>gsap.to(item,{borderColor:'rgba(200,146,42,.35)',y:-4,duration:.26}));
+    item.addEventListener('mouseleave',()=>gsap.to(item,{borderColor:'rgba(200,146,42,.09)',y:0,duration:.32}));
   });
-}, 800);
+}, 600);
 
-// ══════════════════════════════════════════════════════
-//  8. BOOKING FORM
-// ══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════
+//  8. BOOKING → WA DEEP LINK
+// ════════════════════════════════════════════════════
 function onBook(e){
   e.preventDefault();
-  const nama   =document.getElementById('bk-nama').value.trim();
-  const wa     =document.getElementById('bk-wa').value.trim();
-  const tgl    =document.getElementById('bk-tgl').value;
-  const jam    =document.getElementById('bk-jam').value;
-  const tamu   =document.getElementById('bk-tamu').value;
-  const note   =document.getElementById('bk-note').value.trim();
-  if(!nama||!wa||!tgl||!jam||!tamu){ alert('Mohon lengkapi semua data.'); return false; }
-  const tglFmt =new Date(tgl).toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const v=id=>document.getElementById(id)?.value?.trim()||'';
+  const nama=v('bk-nama'),wa=v('bk-wa'),tgl=v('bk-tgl'),jam=v('bk-jam'),tamu=v('bk-tamu'),note=v('bk-note');
+  if(!nama||!wa||!tgl||!jam||!tamu){ alert('Mohon lengkapi semua data reservasi.'); return false; }
+  const tglFmt=new Date(tgl).toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   let msg=`Halo Adnan's Restaurant 🍽️\n\nSaya ingin *reservasi meja*:\n\n👤 Nama: ${nama}\n📞 WA: ${wa}\n📅 Tanggal: ${tglFmt}\n⏰ Pukul: ${jam}\n👥 Tamu: ${tamu}`;
   if(note) msg+=`\n📝 Catatan: ${note}`;
   msg+='\n\nTerima kasih! 🙏';
