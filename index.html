@@ -1172,8 +1172,6 @@ window.addEventListener('scroll',()=>{
   let ad=0;
   for(let i=0;i<ZONES.length;i++) if(rawP>=(ZONES[i].in0+.001)) ad=i;
   if(ad!==curDot){ curDot=ad; dotEls.forEach((d,i)=>d.classList.toggle('on',i===ad)); }
-  // Direct call ensures sections always show — rAF loop provides smooth video scrubbing on top
-  applyZones(rawP);
   if(isMobile) schedMobileTick();
 },{passive:true});
 
@@ -1224,17 +1222,17 @@ if(!isMobile){
     if(curEl){ curEl.style.left=mouse.x+'px'; curEl.style.top=mouse.y+'px'; }
     if(cur2El){ cur2El.style.left=c2x+'px'; cur2El.style.top=c2y+'px'; }
 
-    // smooth scroll
+    // smooth scroll — video only
     smoothP=lerp(smoothP,rawP,.11);
-    const p=smoothP;
 
-    // video frame
+    // video frame uses smoothP for buttery scrubbing
     if(readyToPlay){
-      const idx=Math.round(p*(TOTAL_FRAMES-1));
+      const idx=Math.round(smoothP*(TOTAL_FRAMES-1));
       if(idx!==currentIdx){ currentIdx=idx; drawFrame(idx); }
     }
 
-    applyZones(p);
+    // zones use rawP — immediate, no conflict with smoothP lag
+    applyZones(rawP);
 
     // particles
     if(dust1 && dust2 && renderer3){
