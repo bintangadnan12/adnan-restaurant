@@ -201,69 +201,105 @@ nav>*{pointer-events:auto}
 #s1{display:flex;flex-direction:column;justify-content:center;padding:0 56px}
 .m-intro{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(11px,1.2vw,15px);color:rgba(245,240,232,.28);margin-bottom:8px;font-weight:300}
 .m-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(26px,3.8vw,52px);line-height:.88;letter-spacing:-.5px;margin-bottom:8px;color:var(--cream)}
-.m-tagline{font-family:'Bebas Neue',sans-serif;font-size:7px;letter-spacing:5px;color:rgba(200,146,42,.3);margin-bottom:20px}
-.m-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.m-tagline{font-family:'Bebas Neue',sans-serif;font-size:7px;letter-spacing:5px;color:rgba(200,146,42,.3);margin-bottom:18px}
+.m-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
 .m-footer-note{font-size:8px;font-weight:300;color:rgba(245,240,232,.2);letter-spacing:.5px}
 .m-see-all{font-family:'Bebas Neue',sans-serif;font-size:7px;letter-spacing:4px;color:rgba(200,146,42,.4);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .25s}
 .m-see-all:hover{color:var(--gold)}
 .m-see-all::after{content:'→';font-family:sans-serif;font-size:10px}
-.menu-row{display:flex;gap:10px;align-items:stretch}
-.menu-card{
-  flex:1;border:1px solid rgba(200,146,42,.1);padding:18px 16px;
-  background:rgba(6,4,1,.6);backdrop-filter:blur(8px) saturate(140%);
-  transform:perspective(1200px) translateZ(-520px);opacity:0;
-  transition:
-    opacity   .95s ease calc(var(--mc,0)*130ms),
-    transform 1s   cubic-bezier(.19,1,.22,1) calc(var(--mc,0)*130ms),
-    border-color .3s,background .3s,box-shadow .3s;
-  position:relative;overflow:hidden;cursor:pointer;
-}
-.menu-card::before{content:'';position:absolute;inset:0;background:linear-gradient(150deg,rgba(200,146,42,.05) 0%,transparent 60%);opacity:0;transition:opacity .35s}
-.menu-card:hover{border-color:rgba(200,146,42,.35);background:rgba(15,10,2,.72);box-shadow:0 0 32px rgba(200,146,42,.08)}
-.menu-card:hover::before{opacity:1}
-.sec.anim-in .menu-card{opacity:1;transform:perspective(1200px) translateZ(0)}
-.sec.anim-out .menu-card{opacity:0;transform:perspective(1200px) translateZ(-280px);
-  transition:opacity .2s ease calc(var(--mc,0)*40ms),transform .22s ease calc(var(--mc,0)*40ms)}
-.mc-cat{font-family:'Bebas Neue',sans-serif;font-size:6.5px;letter-spacing:5px;color:var(--gold-dk);margin-bottom:9px;text-transform:uppercase}
-.mc-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,1.5vw,20px);font-weight:600;color:var(--cream);line-height:1.18;margin-bottom:7px;transition:color .25s}
-.mc-desc{font-size:9px;font-weight:300;color:rgba(245,240,232,.28);line-height:1.75;margin-bottom:14px}
-.mc-price{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--gold);letter-spacing:1px;transition:color .25s}
-.mc-price small{font-family:'DM Sans',sans-serif;font-size:7px;color:rgba(200,146,42,.38);letter-spacing:1px;display:block;margin-top:2px}
 
-/* ── S2 TENTANG ──────────────────────────────────── */
-#s2{display:flex;flex-direction:column;justify-content:center;align-items:flex-end;padding:0 56px}
-.ab-inner{max-width:520px;text-align:right}
-/* Stats row */
-.ab-stats{display:flex;gap:0;margin-bottom:20px;border:1px solid rgba(200,146,42,.1)}
-.ab-stat{
-  flex:1;padding:12px 14px;text-align:center;border-right:1px solid rgba(200,146,42,.08);
-  opacity:0;transform:translateY(12px);
-  transition:opacity .55s ease calc(var(--asi,0)*90ms + .3s),transform .6s cubic-bezier(.25,.46,.45,.94) calc(var(--asi,0)*90ms + .3s)
+/* Featured 1 besar + 3 kecil */
+.menu-featured-layout{display:flex;gap:10px;align-items:stretch}
+
+/* Featured card (kiri, besar) */
+.menu-featured-card{
+  width:40%;flex-shrink:0;border:1px solid rgba(200,146,42,.18);padding:22px 20px;
+  background:rgba(6,4,1,.65);backdrop-filter:blur(10px);
+  display:flex;flex-direction:column;position:relative;overflow:hidden;cursor:pointer;
+  transform:perspective(1200px) translateZ(-520px);opacity:0;
+  transition:opacity .95s ease,transform 1s cubic-bezier(.19,1,.22,1),border-color .3s,box-shadow .3s
 }
-.ab-stat:last-child{border-right:none}
-.sec.anim-in  .ab-stat{opacity:1;transform:none}
-.sec.anim-out .ab-stat{opacity:0;transition-duration:.15s;transition-delay:0s}
-.ab-stat-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,2.4vw,30px);color:var(--gold);line-height:1}
-.ab-stat-lbl{font-family:'Bebas Neue',sans-serif;font-size:5.5px;letter-spacing:3px;color:rgba(245,240,232,.22);margin-top:4px;text-transform:uppercase}
-#s2 .lbl{flex-direction:row-reverse;justify-content:flex-start}
-#s2 .lbl::before{display:none}
-#s2 .lbl::after{content:'';width:22px;height:1px;background:var(--gold);flex-shrink:0}
-.ab-quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,2.5vw,33px);font-weight:600;color:var(--cream);line-height:1.22;margin-bottom:15px}
+.menu-featured-card::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(145deg,rgba(200,146,42,.07) 0%,transparent 55%);pointer-events:none}
+.sec.anim-in  .menu-featured-card{opacity:1;transform:perspective(1200px) translateZ(0)}
+.sec.anim-out .menu-featured-card{opacity:0;transform:perspective(1200px) translateZ(-280px);transition-duration:.2s}
+.menu-featured-card:hover{border-color:rgba(200,146,42,.4);box-shadow:0 0 40px rgba(200,146,42,.12)}
+.mfc-badge{font-family:'Bebas Neue',sans-serif;font-size:6px;letter-spacing:5px;color:var(--gold);
+  border:1px solid rgba(200,146,42,.28);padding:4px 10px;display:inline-block;margin-bottom:16px;align-self:flex-start}
+.mfc-name{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(22px,2.8vw,38px);font-weight:600;color:var(--cream);line-height:1;margin-bottom:10px}
+.mfc-uline{height:1px;background:var(--gold);width:0;margin-bottom:14px;
+  transition:width .6s cubic-bezier(.25,.46,.45,.94) .35s}
+.sec.anim-in  .mfc-uline{width:55%}
+.sec.anim-out .mfc-uline{width:0;transition-duration:.12s;transition-delay:0s}
+.mfc-cat{font-family:'Bebas Neue',sans-serif;font-size:6px;letter-spacing:4px;color:var(--gold-dk);margin-bottom:10px}
+.mfc-desc{font-size:10px;font-weight:300;color:rgba(245,240,232,.32);line-height:1.9;flex:1;margin-bottom:20px}
+.mfc-price{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(26px,2.8vw,38px);color:var(--gold);letter-spacing:-1px;line-height:1}
+.mfc-price small{font-family:'DM Sans',sans-serif;font-size:7px;font-style:normal;
+  color:rgba(200,146,42,.35);letter-spacing:1px;display:block;margin-top:3px}
+
+/* Side cards (kanan, 3 kecil) */
+.menu-side-cards{flex:1;display:flex;flex-direction:column;gap:8px}
+.menu-card-sm{
+  border:1px solid rgba(200,146,42,.08);padding:13px 14px;
+  background:rgba(6,4,1,.55);backdrop-filter:blur(6px);
+  display:flex;align-items:center;gap:14px;cursor:pointer;position:relative;overflow:hidden;
+  transform:translateX(40px);opacity:0;
+  transition:opacity .75s ease calc(var(--mc,0)*110ms + .2s),
+             transform .85s cubic-bezier(.19,1,.22,1) calc(var(--mc,0)*110ms + .2s),
+             border-color .3s,background .3s
+}
+.sec.anim-in  .menu-card-sm{opacity:1;transform:none}
+.sec.anim-out .menu-card-sm{opacity:0;transform:translateX(20px);transition-duration:.16s;transition-delay:0s}
+.menu-card-sm:hover{border-color:rgba(200,146,42,.28);background:rgba(12,8,2,.7)}
+.mcs-num{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(20px,2vw,28px);color:rgba(200,146,42,.2);flex-shrink:0;line-height:1;width:26px}
+.mcs-info{flex:1;min-width:0}
+.mcs-cat{font-family:'Bebas Neue',sans-serif;font-size:6px;letter-spacing:4px;color:var(--gold-dk);margin-bottom:3px}
+.mcs-name{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(13px,1.4vw,17px);color:var(--cream);margin-bottom:3px;line-height:1.1}
+.mcs-desc{font-size:8px;font-weight:300;color:rgba(245,240,232,.22);line-height:1.5;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mcs-price{font-family:'Bebas Neue',sans-serif;font-size:12px;color:var(--gold);
+  letter-spacing:.5px;flex-shrink:0;text-align:right;white-space:nowrap}
+
+/* ── S2 TENTANG — Timeline ───────────────────────── */
+#s2{display:flex;flex-direction:column;justify-content:center;padding:0 56px}
+.ab-header{margin-bottom:28px}
+.ab-header .lbl{margin-bottom:10px}
+.ab-headline{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(24px,3.2vw,44px);font-weight:600;color:var(--cream);line-height:.9;
+  letter-spacing:-.5px;margin-bottom:8px}
+.ab-sub{font-size:9px;font-weight:300;color:rgba(245,240,232,.28);letter-spacing:.5px}
+
+/* Timeline */
+.ab-timeline{display:flex;flex-direction:column;position:relative;max-width:600px}
+.ab-timeline::before{
+  content:'';position:absolute;left:52px;top:10px;bottom:10px;width:1px;
+  background:linear-gradient(to bottom,var(--gold-dk),rgba(200,146,42,.04))}
+.ab-tl-item{
+  display:grid;grid-template-columns:52px 20px 1fr;align-items:start;
+  padding-bottom:22px;
+  opacity:0;transform:translateY(16px);
+  transition:opacity .6s ease calc(var(--tli,0)*120ms + .15s),
+             transform .65s cubic-bezier(.25,.46,.45,.94) calc(var(--tli,0)*120ms + .15s)
+}
+.ab-tl-item:last-child{padding-bottom:0}
+.sec.anim-in  .ab-tl-item{opacity:1;transform:none}
+.sec.anim-out .ab-tl-item{opacity:0;transform:translateY(10px);transition-duration:.15s;transition-delay:0s}
+.ab-tl-year{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(14px,1.5vw,18px);color:var(--gold);text-align:right;padding-right:14px;
+  padding-top:2px;line-height:1}
+.ab-tl-dot{display:flex;justify-content:center;padding-top:6px}
+.ab-tl-dot::before{content:'';width:7px;height:7px;border-radius:50%;
+  background:var(--gold-dk);border:1px solid var(--gold);flex-shrink:0}
+.ab-tl-content{padding-left:14px}
+.ab-tl-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(11px,1.3vw,14px);
+  letter-spacing:3px;color:var(--cream);margin-bottom:5px}
+.ab-tl-desc{font-size:9px;font-weight:300;color:rgba(245,240,232,.3);line-height:1.8}
+/* Keep old classes harmless */
 .ab-quote em{color:var(--gold)}
-.ab-body{font-size:10px;font-weight:300;color:rgba(245,240,232,.32);line-height:1.95;margin-bottom:24px}
-.ab-values{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:left}
-.av-item{
-  border:1px solid rgba(200,146,42,.09);padding:13px;
-  background:rgba(8,5,2,.45);backdrop-filter:blur(5px);
-  opacity:0;transform:translateX(35px);
-  transition:opacity .6s ease calc(var(--vi,0)*110ms),transform .65s cubic-bezier(.25,.46,.45,.94) calc(var(--vi,0)*110ms),border-color .3s,background .3s,transform .3s;
-}
-.sec.anim-in  .av-item{opacity:1;transform:none}
-.sec.anim-out .av-item{opacity:0;transform:translateX(22px);transition-duration:.16s,.16s}
-.av-item:hover{border-color:rgba(200,146,42,.3);background:rgba(18,11,2,.6);transform:translateY(-3px) !important}
-.av-icon{font-size:15px;margin-bottom:6px;display:block}
-.av-name{font-family:'Bebas Neue',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);margin-bottom:4px}
-.av-desc{font-size:8px;font-weight:300;color:rgba(245,240,232,.27);line-height:1.75}
 
 /* ── S3 DAPUR ────────────────────────────────────── */
 #s3{display:flex;flex-direction:column;justify-content:center;padding:0 56px}
@@ -391,11 +427,10 @@ nav>*{pointer-events:auto}
   #s2 .lbl{flex-direction:row}
   #s2 .lbl::before{display:block}#s2 .lbl::after{display:none}
   #s4{padding:36px 16px 0}
-  .menu-row{flex-direction:column;gap:8px}
-  .ab-values{grid-template-columns:1fr 1fr}
-  .ab-stats{display:grid;grid-template-columns:1fr 1fr}
-  .ab-stat{border-right:none;border-bottom:1px solid rgba(200,146,42,.08)}
-  .ab-stat:nth-child(odd){border-right:1px solid rgba(200,146,42,.08)}
+  .menu-featured-layout{flex-direction:column}
+  .menu-featured-card{width:100%}
+  .ab-timeline::before{left:44px}
+  .ab-tl-item{grid-template-columns:44px 18px 1fr}
   .testi-row{flex-direction:column;gap:7px}
   .bk-form{grid-template-columns:1fr}
   .h-title{font-size:clamp(34px,9vw,54px)}
@@ -564,35 +599,49 @@ nav>*{pointer-events:auto}
       <p class="m-intro">Diracik dari bahan pilihan, disajikan dengan presisi</p>
       <h2 class="m-title">Cita Rasa yang<br>Berbicara Sendiri</h2>
       <p class="m-tagline">SIGNATURE · PASTA · SEAFOOD · DESSERT</p>
-      <div class="menu-row">
-        <div class="menu-card" style="--mc:0">
-          <div class="mc-cat">Signature · Main Course</div>
-          <div class="mc-name">Wagyu Tenderloin</div>
-          <div class="mc-uline"></div>
-          <div class="mc-desc">Grilled sempurna dengan herb butter Perancis, served dengan roasted vegetables segar pilihan</div>
-          <div class="mc-price">Rp 285.000 <small>per porsi</small></div>
+      <div class="menu-featured-layout">
+
+        <!-- Featured: Wagyu (kiri, besar) -->
+        <div class="menu-featured-card">
+          <div class="mfc-badge">CHEF'S SIGNATURE</div>
+          <div class="mfc-cat">MAIN COURSE · SIGNATURE</div>
+          <div class="mfc-name">Wagyu<br>Tenderloin</div>
+          <div class="mfc-uline"></div>
+          <div class="mfc-desc">Wagyu grade A4 digrilled sempurna dengan herb butter Perancis, jus demi-glace pekat, dan roasted heirloom vegetables pilihan chef.</div>
+          <div class="mfc-price">Rp 285.000 <small>per porsi · termasuk side dish</small></div>
         </div>
-        <div class="menu-card" style="--mc:1">
-          <div class="mc-cat">Pasta · Chef's Choice</div>
-          <div class="mc-name">Truffle Carbonara</div>
-          <div class="mc-uline"></div>
-          <div class="mc-desc">Pasta handmade dengan jamur truffle pilihan, parmesan aged 24 bulan, dan egg yolk premium</div>
-          <div class="mc-price">Rp 155.000 <small>per porsi</small></div>
+
+        <!-- 3 side cards (kanan, kecil) -->
+        <div class="menu-side-cards">
+          <div class="menu-card-sm" style="--mc:0">
+            <div class="mcs-num">01</div>
+            <div class="mcs-info">
+              <div class="mcs-cat">Pasta · Chef's Choice</div>
+              <div class="mcs-name">Truffle Carbonara</div>
+              <div class="mcs-desc">Pasta handmade, jamur truffle, parmesan aged 24 bulan</div>
+            </div>
+            <div class="mcs-price">Rp 155.000</div>
+          </div>
+          <div class="menu-card-sm" style="--mc:1">
+            <div class="mcs-num">02</div>
+            <div class="mcs-info">
+              <div class="mcs-cat">Seafood · Fresh Daily</div>
+              <div class="mcs-name">Pan-Seared Salmon</div>
+              <div class="mcs-desc">Salmon Atlantik, lemon butter, capers, wild herb salad</div>
+            </div>
+            <div class="mcs-price">Rp 195.000</div>
+          </div>
+          <div class="menu-card-sm" style="--mc:2">
+            <div class="mcs-num">03</div>
+            <div class="mcs-info">
+              <div class="mcs-cat">Dessert · Classic</div>
+              <div class="mcs-name">Tiramisu Classico</div>
+              <div class="mcs-desc">Mascarpone segar, espresso double shot, cocoa Valrhona</div>
+            </div>
+            <div class="mcs-price">Rp 85.000</div>
+          </div>
         </div>
-        <div class="menu-card" style="--mc:2">
-          <div class="mc-cat">Seafood · Fresh Daily</div>
-          <div class="mc-name">Pan-Seared Salmon</div>
-          <div class="mc-uline"></div>
-          <div class="mc-desc">Salmon Atlantik fillet dengan lemon butter, capers, dan wild herb garden salad segar</div>
-          <div class="mc-price">Rp 195.000 <small>per porsi</small></div>
-        </div>
-        <div class="menu-card" style="--mc:3">
-          <div class="mc-cat">Dessert · Classic</div>
-          <div class="mc-name">Tiramisu Classico</div>
-          <div class="mc-uline"></div>
-          <div class="mc-desc">Resep autentik Italia dengan mascarpone segar, espresso double shot, dan cocoa Valrhona</div>
-          <div class="mc-price">Rp 85.000 <small>per porsi</small></div>
-        </div>
+
       </div>
       <div class="m-footer">
         <span class="m-footer-note">Semua bahan segar — diproses hari ini</span>
@@ -600,35 +649,51 @@ nav>*{pointer-events:auto}
       </div>
     </section>
 
-    <!-- S2: TENTANG -->
+    <!-- S2: TENTANG — Timeline -->
     <section class="sec" id="s2">
-      <div class="ab-inner">
-        <p class="lbl">Tentang Kami</p>
-        <div class="ab-stats">
-          <div class="ab-stat" style="--asi:0">
-            <div class="ab-stat-num">2019</div>
-            <div class="ab-stat-lbl">Tahun Berdiri</div>
-          </div>
-          <div class="ab-stat" style="--asi:1">
-            <div class="ab-stat-num">5.000+</div>
-            <div class="ab-stat-lbl">Tamu Puas</div>
-          </div>
-          <div class="ab-stat" style="--asi:2">
-            <div class="ab-stat-num">5</div>
-            <div class="ab-stat-lbl">Chef Ahli</div>
-          </div>
-          <div class="ab-stat" style="--asi:3">
-            <div class="ab-stat-num">4.9</div>
-            <div class="ab-stat-lbl">Rating Google</div>
+      <div class="ab-header">
+        <p class="lbl">Perjalanan Kami</p>
+        <h2 class="ab-headline">Dari Mimpi<br>Menjadi Warisan</h2>
+        <p class="ab-sub">7 tahun menempa rasa, membangun kepercayaan</p>
+      </div>
+      <div class="ab-timeline">
+
+        <div class="ab-tl-item" style="--tli:0">
+          <div class="ab-tl-year">2019</div>
+          <div class="ab-tl-dot"></div>
+          <div class="ab-tl-content">
+            <div class="ab-tl-title">Adnan's Berdiri</div>
+            <div class="ab-tl-desc">Dimulai dari dapur kecil dengan satu visi: menghadirkan fine dining yang hangat dan jujur di Jakarta Selatan.</div>
           </div>
         </div>
-        <blockquote class="ab-quote">"Setiap hidangan adalah <em class="gold-word">karya seni</em> yang lahir dari <em>dedikasi tanpa batas</em>"</blockquote>
-        <p class="ab-body">Adnan's Restaurant lahir dari keyakinan bahwa makan bukan sekadar mengisi perut — melainkan sebuah perjalanan rasa, cerita, dan kenangan bersama orang-orang tercinta. Kami menghadirkan pengalaman fine dining yang hangat dan personal di jantung Jakarta.</p>
-        <div class="ab-values">
-          <div class="av-item" style="--vi:0"><span class="av-icon">🌿</span><div class="av-name">Bahan Premium</div><div class="av-desc">Dipilih langsung dari farm dan pasar terpercaya setiap pagi</div></div>
-          <div class="av-item" style="--vi:1"><span class="av-icon">👨‍🍳</span><div class="av-name">Chef Bersertifikat</div><div class="av-desc">5+ tahun pengalaman di dapur fine dining internasional</div></div>
-          <div class="av-item" style="--vi:2"><span class="av-icon">✨</span><div class="av-name">Suasana Eksklusif</div><div class="av-desc">Dirancang untuk momen yang tak ingin kamu lupakan</div></div>
+
+        <div class="ab-tl-item" style="--tli:1">
+          <div class="ab-tl-year">2021</div>
+          <div class="ab-tl-dot"></div>
+          <div class="ab-tl-content">
+            <div class="ab-tl-title">1.000 Tamu Pertama</div>
+            <div class="ab-tl-desc">Milestone pertama yang membuktikan bahwa kualitas dan kehangatan adalah bahasa universal.</div>
+          </div>
         </div>
+
+        <div class="ab-tl-item" style="--tli:2">
+          <div class="ab-tl-year">2022</div>
+          <div class="ab-tl-dot"></div>
+          <div class="ab-tl-content">
+            <div class="ab-tl-title">Open Kitchen & 5 Chef Bersertifikat</div>
+            <div class="ab-tl-desc">Membuka konsep dapur terbuka — transparansi bukan sekadar tren, melainkan janji kami kepada setiap tamu.</div>
+          </div>
+        </div>
+
+        <div class="ab-tl-item" style="--tli:3">
+          <div class="ab-tl-year">Kini</div>
+          <div class="ab-tl-dot"></div>
+          <div class="ab-tl-content">
+            <div class="ab-tl-title">5.000+ Tamu · Rating 4.9★</div>
+            <div class="ab-tl-desc">Setiap meja, setiap momen, setiap kenangan — itulah yang terus mendorong kami untuk tidak pernah berhenti bertumbuh.</div>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -754,7 +819,7 @@ const FH = isMobile ? 960 : 540;
 //  1. WORD-SPLIT for 3D stagger (excludes h-title, ab-body)
 // ════════════════════════════════════════════════════
 document.querySelectorAll(
-  '.h-eyebrow,.h-sub,.h-tag,.m-title,.m-intro,.m-tagline,.ab-quote,.kc-title,.kc-intro,.kc-sub,.rv-title,.rv-sub,.tcard-q'
+  '.h-eyebrow,.h-sub,.h-tag,.m-title,.m-intro,.m-tagline,.ab-headline,.ab-sub,.kc-title,.kc-intro,.kc-sub,.rv-title,.rv-sub,.tcard-q,.mfc-desc,.mfc-cat,.mcs-cat,.mcs-desc'
 ).forEach(el=>{
   function wrapWords(node, ctr){
     if(node.nodeType===3){
