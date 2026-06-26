@@ -1243,8 +1243,8 @@ if(!isMobile){
         if(pa[i+1]>7) pa[i+1]=-7;
       }
       dust1.geometry.attributes.position.needsUpdate=true;
-      dust1.rotation.y=p*Math.PI*.6+t*.007;
-      dust1.material.opacity=lerp(.18,.35,1-p)+Math.sin(t*.35)*.05;
+      dust1.rotation.y=smoothP*Math.PI*.6+t*.007;
+      dust1.material.opacity=lerp(.18,.35,1-smoothP)+Math.sin(t*.35)*.05;
 
       dust2.rotation.y=t*.004;
       dust2.material.opacity=.06+Math.sin(t*.28)*.04;
