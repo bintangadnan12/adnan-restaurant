@@ -325,6 +325,70 @@ nav>*{pointer-events:auto}
   .feat-item{column-gap:10px}
   #s4{padding:44px 14px 0}
 }
+
+/* ── GRAIN OVERLAY ──────────────────────────────────── */
+#grain{position:fixed;inset:0;z-index:7;pointer-events:none;opacity:.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px 200px;animation:grn 10s steps(8) infinite}
+@keyframes grn{to{background-position:200px 200px}}
+
+/* ── HERO LETTER SPANS (.hl) ────────────────────────── */
+.hl{display:inline-block;opacity:0;
+  transform:translateZ(-340px) translateY(-20px) rotateX(16deg);filter:blur(6px);
+  transition:
+    opacity  .65s cubic-bezier(.25,.46,.45,.94) calc(var(--li,0)*100ms + 60ms),
+    transform .8s  cubic-bezier(.19,1,.22,1)    calc(var(--li,0)*100ms + 60ms),
+    filter   .5s  ease                          calc(var(--li,0)*100ms + 60ms)}
+#s0.anim-in .hl{opacity:1;transform:none;filter:none}
+#s0.anim-out .hl{opacity:0;filter:blur(4px);
+  transition:opacity .2s ease,transform .2s ease,filter .2s ease}
+
+/* ── HERO SUBTITLE + TAGLINE ────────────────────────── */
+.h-sub-wrap{opacity:0;transform:translateY(14px);
+  transition:opacity .7s ease .5s,transform .7s cubic-bezier(.25,.46,.45,.94) .5s}
+#s0.anim-in .h-sub-wrap{opacity:1;transform:none}
+#s0.anim-out .h-sub-wrap{opacity:0;transition-duration:.2s;transition-delay:0s}
+.h-tag-wrap{opacity:0;
+  transition:opacity .7s ease 1.2s}
+#s0.anim-in .h-tag-wrap{opacity:1}
+#s0.anim-out .h-tag-wrap{opacity:0;transition-duration:.2s;transition-delay:0s}
+
+/* ── MENU UNDERLINE ─────────────────────────────────── */
+.mc-uline{height:1px;background:var(--gold);width:0;margin-bottom:7px;
+  transition:width .55s cubic-bezier(.25,.46,.45,.94) calc(var(--mc,0)*130ms + 280ms)}
+.sec.anim-in .mc-uline{width:100%}
+.sec.anim-out .mc-uline{width:0;transition-duration:.12s;transition-delay:0s}
+
+/* ── STAR SPANS ─────────────────────────────────────── */
+.star{display:inline-block;opacity:0;transform:scale(0);
+  transition:
+    opacity  .28s ease                                calc(var(--si,0)*50ms + 220ms),
+    transform .4s  cubic-bezier(.68,-.55,.265,1.55)  calc(var(--si,0)*50ms + 220ms)}
+.sec.anim-in  .star{opacity:1;transform:scale(1)}
+.sec.anim-out .star{opacity:0;transform:scale(0);
+  transition:opacity .12s ease,transform .12s ease}
+
+/* ── AB BODY – whole unit, no word split ────────────── */
+.ab-body{opacity:0;transform:translateY(10px);
+  transition:opacity .8s ease .55s,transform .8s cubic-bezier(.25,.46,.45,.94) .55s}
+.sec.anim-in  .ab-body{opacity:1;transform:none}
+.sec.anim-out .ab-body{opacity:0;transition-duration:.18s;transition-delay:0s}
+
+/* ── AB QUOTE gold emphasis ─────────────────────────── */
+.ab-quote .gold-word{color:var(--gold);font-style:italic}
+
+/* ── ENHANCED FORM FOCUS ────────────────────────────── */
+.fg input:focus,.fg select:focus,.fg textarea:focus{
+  border-color:rgba(200,146,42,.7);background:rgba(200,146,42,.04);
+  box-shadow:0 0 8px rgba(200,146,42,.28)}
+.btn-wa-rv:hover{transform:translateY(-2px)}
+.btn-wa-rv:active{transform:scale(.97) translateY(0)}
+
+/* ── PREFERS REDUCED MOTION ─────────────────────────── */
+@media(prefers-reduced-motion:reduce){
+  .hl,.wd,.star,.mc-uline,.ab-body,.menu-card,.feat-item,.tcard,.bk-wrap,.av-item,
+  .h-sub-wrap,.h-tag-wrap{transition:opacity .3s ease !important;
+    transform:none !important;filter:none !important;width:auto !important}}
 </style>
 </head>
 <body>
@@ -346,6 +410,7 @@ nav>*{pointer-events:auto}
 <div id="vig"></div>
 <div id="grade"></div>
 <div id="scanwash"></div>
+<div id="grain"></div>
 <div id="ltop"></div>
 <div id="lbot"></div>
 
@@ -374,8 +439,8 @@ nav>*{pointer-events:auto}
     <section class="sec" id="s0">
       <p class="h-eyebrow">PENGALAMAN KULINER PREMIUM &nbsp;·&nbsp; JAKARTA</p>
       <h1 class="h-title">ADNAN'S<br><span class="gold">RESTAURANT</span></h1>
-      <p class="h-sub">Di mana setiap momen<br>menjadi kenangan abadi</p>
-      <p class="h-tag">FINE DINING &nbsp;·&nbsp; OPEN KITCHEN &nbsp;·&nbsp; RESERVASI TERSEDIA</p>
+      <div class="h-sub-wrap"><p class="h-sub">Di mana setiap momen<br>menjadi kenangan abadi</p></div>
+      <div class="h-tag-wrap"><p class="h-tag">FINE DINING &nbsp;·&nbsp; OPEN KITCHEN &nbsp;·&nbsp; RESERVASI TERSEDIA</p></div>
     </section>
 
     <!-- S1: MENU -->
@@ -386,24 +451,28 @@ nav>*{pointer-events:auto}
         <div class="menu-card" style="--mc:0">
           <div class="mc-cat">Signature · Main Course</div>
           <div class="mc-name">Wagyu Tenderloin</div>
+          <div class="mc-uline"></div>
           <div class="mc-desc">Grilled sempurna dengan herb butter Perancis, served dengan roasted vegetables segar pilihan</div>
           <div class="mc-price">Rp 285.000 <small>per porsi</small></div>
         </div>
         <div class="menu-card" style="--mc:1">
           <div class="mc-cat">Pasta · Chef's Choice</div>
           <div class="mc-name">Truffle Carbonara</div>
+          <div class="mc-uline"></div>
           <div class="mc-desc">Pasta handmade dengan jamur truffle pilihan, parmesan aged 24 bulan, dan egg yolk premium</div>
           <div class="mc-price">Rp 155.000 <small>per porsi</small></div>
         </div>
         <div class="menu-card" style="--mc:2">
           <div class="mc-cat">Seafood · Fresh Daily</div>
           <div class="mc-name">Pan-Seared Salmon</div>
+          <div class="mc-uline"></div>
           <div class="mc-desc">Salmon Atlantik fillet dengan lemon butter, capers, dan wild herb garden salad segar</div>
           <div class="mc-price">Rp 195.000 <small>per porsi</small></div>
         </div>
         <div class="menu-card" style="--mc:3">
           <div class="mc-cat">Dessert · Classic</div>
           <div class="mc-name">Tiramisu Classico</div>
+          <div class="mc-uline"></div>
           <div class="mc-desc">Resep autentik Italia dengan mascarpone segar, espresso double shot, dan cocoa Valrhona</div>
           <div class="mc-price">Rp 85.000 <small>per porsi</small></div>
         </div>
@@ -414,7 +483,7 @@ nav>*{pointer-events:auto}
     <section class="sec" id="s2">
       <div class="ab-inner">
         <p class="lbl">Tentang Kami</p>
-        <blockquote class="ab-quote">"Setiap hidangan adalah karya seni yang lahir dari <em>dedikasi tanpa batas</em>"</blockquote>
+        <blockquote class="ab-quote">"Setiap hidangan adalah <em class="gold-word">karya seni</em> yang lahir dari <em>dedikasi tanpa batas</em>"</blockquote>
         <p class="ab-body">Adnan's Restaurant lahir dari keyakinan bahwa makan bukan sekadar mengisi perut — melainkan sebuah perjalanan rasa, cerita, dan kenangan bersama orang-orang tercinta. Kami menghadirkan pengalaman fine dining yang hangat dan personal di jantung Jakarta.</p>
         <div class="ab-values">
           <div class="av-item" style="--vi:0"><span class="av-icon">🌿</span><div class="av-name">Bahan Premium</div><div class="av-desc">Dipilih langsung dari farm dan pasar terpercaya setiap pagi</div></div>
@@ -443,17 +512,17 @@ nav>*{pointer-events:auto}
 
       <div class="testi-row">
         <div class="tcard" style="--ti:0">
-          <div class="tcard-stars">★★★★★</div>
+          <div class="tcard-stars"><span class="star" style="--si:0">★</span><span class="star" style="--si:1">★</span><span class="star" style="--si:2">★</span><span class="star" style="--si:3">★</span><span class="star" style="--si:4">★</span></div>
           <div class="tcard-q">"Pengalaman makan malam yang luar biasa. Steaknya sempurna, pelayanannya sangat hangat."</div>
           <div class="tcard-name">RINA MAHARANI</div>
         </div>
         <div class="tcard" style="--ti:1">
-          <div class="tcard-stars">★★★★★</div>
+          <div class="tcard-stars"><span class="star" style="--si:0">★</span><span class="star" style="--si:1">★</span><span class="star" style="--si:2">★</span><span class="star" style="--si:3">★</span><span class="star" style="--si:4">★</span></div>
           <div class="tcard-q">"Suasananya romantis banget. Kami pilih Adnan's untuk anniversary dan tidak menyesal."</div>
           <div class="tcard-name">BAGAS & TARI</div>
         </div>
         <div class="tcard" style="--ti:2">
-          <div class="tcard-stars">★★★★★</div>
+          <div class="tcard-stars"><span class="star" style="--si:0">★</span><span class="star" style="--si:1">★</span><span class="star" style="--si:2">★</span><span class="star" style="--si:3">★</span><span class="star" style="--si:4">★</span></div>
           <div class="tcard-q">"Truffle pasta-nya... saya tidak bisa berhenti makan. Akan selalu kembali ke sini."</div>
           <div class="tcard-name">AHMAD KHALID</div>
         </div>
@@ -519,10 +588,10 @@ const FW = isMobile ? 540 : 960;
 const FH = isMobile ? 960 : 540;
 
 // ════════════════════════════════════════════════════
-//  1. WORD-SPLIT for 3D stagger
+//  1. WORD-SPLIT for 3D stagger (excludes h-title, ab-body)
 // ════════════════════════════════════════════════════
 document.querySelectorAll(
-  '.h-eyebrow,.h-title,.h-sub,.h-tag,.m-title,.ab-quote,.ab-body,.kc-title,.rv-title,.rv-sub'
+  '.h-eyebrow,.h-sub,.h-tag,.m-title,.ab-quote,.kc-title,.rv-title,.rv-sub,.tcard-q'
 ).forEach(el=>{
   function wrapWords(node, ctr){
     if(node.nodeType===3){
@@ -549,6 +618,35 @@ document.querySelectorAll(
   el.childNodes.forEach(c=>frag.appendChild(wrapWords(c,ctr)));
   el.innerHTML=''; el.appendChild(frag);
 });
+
+// ── LETTER-SPLIT for .h-title (character-by-character) ──
+(function(){
+  const el=document.querySelector('.h-title');
+  if(!el) return;
+  let idx=0;
+  function splitLetters(node){
+    if(node.nodeType===3){
+      const frag=document.createDocumentFragment();
+      [...node.textContent].forEach(ch=>{
+        if(ch===' '||ch==='\n'){ frag.appendChild(document.createTextNode(' ')); return; }
+        const sp=document.createElement('span');
+        sp.className='hl'; sp.style.setProperty('--li',idx++); sp.textContent=ch;
+        frag.appendChild(sp);
+      });
+      return frag;
+    }
+    if(node.nodeType===1){
+      if(node.nodeName==='BR'){ idx++; return document.createTextNode(' '); }
+      const cl=node.cloneNode(false);
+      node.childNodes.forEach(c=>cl.appendChild(splitLetters(c)));
+      return cl;
+    }
+    return node.cloneNode(true);
+  }
+  const frag=document.createDocumentFragment();
+  el.childNodes.forEach(c=>frag.appendChild(splitLetters(c)));
+  el.innerHTML=''; el.appendChild(frag);
+})();
 
 // ════════════════════════════════════════════════════
 //  2. CANVAS FRAME SCRUBBING
@@ -598,7 +696,19 @@ function onLoad(){
   if(loadedCount===1) drawFrame(0);
   if(loadedCount===20){
     readyToPlay=true;
-    setTimeout(()=>{ loaderEl.classList.add('out'); shintEl.classList.add('vis'); }, 400);
+    setTimeout(()=>{
+      loaderEl.classList.add('out');
+      shintEl.classList.add('vis');
+      // Hero letter animation starts 300ms after loader begins fading
+      setTimeout(()=>{
+        heroReady=true;
+        prevSt[0]='in';
+        const s0=document.getElementById('s0');
+        s0.classList.remove('anim-out');
+        void s0.offsetWidth;
+        s0.classList.add('anim-in','vis');
+      }, 300);
+    }, 400);
   }
   if(loadedCount===TOTAL_FRAMES) readyToPlay=true;
 }
@@ -683,7 +793,7 @@ const sceneLbl =document.getElementById('scene-lbl');
 const gradeEl  =document.getElementById('grade');
 const swEl     =document.getElementById('scanwash');
 
-let rawP=0, smoothP=0, curDot=0, curZone=-1;
+let rawP=0, smoothP=0, curDot=0, curZone=-1, heroReady=false;
 const dotEls   =document.querySelectorAll('.dot');
 const prevSt   =new Array(5).fill('out');
 
@@ -729,6 +839,8 @@ function applyZones(p){
     el.style.opacity=String(op);
     const st=op>.04?'in':'out';
     if(st!==prevSt[i]){
+      // Hero (s0) animation waits for heroReady flag — loader fires it separately
+      if(z.id==='s0' && !heroReady) return;
       prevSt[i]=st;
       el.classList.toggle('vis',st==='in');
       if(st==='in'){ el.classList.remove('anim-out'); void el.offsetWidth; el.classList.add('anim-in'); }
